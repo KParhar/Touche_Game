@@ -1,0 +1,21 @@
+﻿  Utility.cpp
+  Timer.cpp
+  Spritesheet.cpp
+c:\users\kush\desktop\freelancing jobs\yabadaba\touche game\touche_game\touche_game\touche_game\spritesheet.cpp(37): warning C4101: 'newRect': unreferenced local variable
+  Renderer.cpp
+c:\users\kush\desktop\freelancing jobs\yabadaba\touche game\touche_game\touche_game\touche_game\renderer.cpp(80): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  PlayerControl.cpp
+  Pawn.cpp
+  main.cpp
+  Grid.cpp
+  GameStateManager.cpp
+c:\users\kush\desktop\freelancing jobs\yabadaba\touche game\touche_game\touche_game\touche_game\gamestatemanager.cpp(20): warning C4018: '<': signed/unsigned mismatch
+c:\users\kush\desktop\freelancing jobs\yabadaba\touche game\touche_game\touche_game\touche_game\gamestatemanager.cpp(32): warning C4018: '<': signed/unsigned mismatch
+  DevTestState.cpp
+  Animation.cpp
+c:\users\kush\desktop\freelancing jobs\yabadaba\touche game\touche_game\touche_game\touche_game\animation.cpp(30): warning C4018: '>=': signed/unsigned mismatch
+c:\users\kush\desktop\freelancing jobs\yabadaba\touche game\touche_game\touche_game\touche_game\animation.cpp(46): warning C4018: '>=': signed/unsigned mismatch
+  Generating Code...
+c:\users\kush\desktop\freelancing jobs\yabadaba\touche game\touche_game\touche_game\touche_game\main.cpp(76): warning C4715: 'init': not all control paths return a value
+  Touche_Game.vcxproj -> C:\Users\Kush\Desktop\Freelancing Jobs\yabadaba\Touche Game\Touche_Game\Touche_Game\Debug\Touche_Game.exe
+  Touche_Game.vcxproj -> C:\Users\Kush\Desktop\Freelancing Jobs\yabadaba\Touche Game\Touche_Game\Touche_Game\Debug\Touche_Game.pdb (Partial PDB)

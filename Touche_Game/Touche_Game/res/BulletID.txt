@@ -1,0 +1,2 @@
+BulletSpeed=1 BulletType=SINGLE_DAMAGE Damage=1
+BulletSpeed=1 BulletType=SPREAD_DAMAGE
