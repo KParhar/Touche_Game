@@ -1,0 +1,66 @@
+package main.game_states;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.util.ArrayList;
+import main.input.KeyInputDevice;
+import main.input.MouseInputDevice;
+
+public class Gameplay_State extends GameState{
+	
+	public void render(Graphics g) {
+		
+	}
+	
+	public void tick() {
+        
+	}
+
+	public void init() {
+    	
+    	reset(true);
+	
+	}
+	
+	public void reset(boolean fullReset) {
+		switchState = -1;
+		renderLoad = false;
+		player.setDeath(false);
+		player.setHealth(100);
+		player.setX(19*50);
+		player.setY(12*50);
+		camera.setCameraPos(0, 0);
+		timesReturned++;
+		if(fullReset){
+			timesReturned = 0;
+			dungeonsFinished[0] = false;
+			dungeonsFinished[1] = false;
+			dungeonsFinished[2] = false;
+		}
+	}
+
+	public void input(KeyInputDevice[] keys, MouseInputDevice[] mousebuttons){
+    	
+    	if(keys[2].getPressed()){
+    		player.move(2, 3);
+    	}else if(keys[3].getPressed()){
+    		player.move(3, 3);
+    	}else{
+    		player.stopMovingX();
+    	}
+    	
+    	if(keys[0].getPressed()){
+    		player.move(0, 3);
+    	}else if(keys[1].getPressed()){
+    		player.move(1, 3);
+    	}else{
+    		player.stopMovingY();
+    	}
+    	
+    	if(keys[5].getPressed()){
+    		System.exit(-1);
+    	}
+	}
+
+}

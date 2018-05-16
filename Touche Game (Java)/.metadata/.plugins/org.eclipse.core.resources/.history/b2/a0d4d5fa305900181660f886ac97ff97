@@ -1,0 +1,29 @@
+package main.level.tiles;
+
+import java.awt.Graphics;
+import main.graphics.SpriteSheet;
+
+public class StoneWallTile extends Tile{
+
+	public StoneWallTile(int X, int Y, int W, int H, SpriteSheet s) {
+		super(X, Y, W, H, true, s);
+		tile = s.getSprite(0, 32, 15, 15, W, H);
+	}
+	
+	public void render(Graphics g) {
+		g.drawImage(tile, x, y, null);
+	}
+	
+	public void tick() {
+		
+	}
+
+	public boolean isEventTile() {
+		return false;
+	}
+	
+	public boolean isTurretTile() {
+		return false;
+	}
+
+}

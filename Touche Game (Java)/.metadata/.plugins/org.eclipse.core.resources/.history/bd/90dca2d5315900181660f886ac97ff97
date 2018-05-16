@@ -1,0 +1,52 @@
+package main.game_states;
+
+import java.awt.Graphics;
+import java.util.ArrayList;
+
+import main.input.KeyInputDevice;
+import main.input.MouseInputDevice;
+
+public class GameStateManager {
+	
+	int currentState;
+	ArrayList<GameState> gameStates;
+	boolean[] hasInit;
+	String playerType = "Mage";
+	
+	public void initGameStates(){
+		gameStates = new ArrayList<GameState>();
+		gameStates.add(new Gameplay_State());
+		
+		hasInit = new boolean[gameStates.size()];
+		for(int i = 0; i < hasInit.length; i++){
+			hasInit[i] = false;
+		}
+	}
+	
+	public void setState(int state){
+		currentState = state;
+		init();
+	}	
+	
+	public void init(){
+		gameStates.get(currentState).setPlayerType(playerType);
+		gameStates.get(currentState).init();
+	}
+	
+	public void render(Graphics g){
+		gameStates.get(currentState).render(g);
+	}
+	
+	public void tick(){
+		gameStates.get(currentState).tick();
+		
+		if(gameStates.get(currentState).getSwitchState() > -1){
+			setState(gameStates.get(currentState).getSwitchState());
+		}
+	}
+	
+	public void input(KeyInputDevice[] keys, MouseInputDevice[] mousebuttons){
+		gameStates.get(currentState).input(keys, mousebuttons);
+	}
+	
+}

@@ -1,0 +1,117 @@
+package main.game_states;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+
+import main.Timer;
+import main.input.KeyInputDevice;
+import main.input.MouseInputDevice;
+
+public class PlayerClassSelect_State extends GameState{
+
+	String playerClass;
+	
+	String[] menuOptions;
+	int optionSelected;
+	
+	boolean canInput;
+	Timer inputStart = new Timer(20, true);
+	
+	boolean canSwitchMenuOption;
+	Timer menuSwitch = new Timer(10, true);
+	
+	public void render(Graphics g) {
+		
+		if(renderLoad){
+			
+			renderLoading(g);
+		
+		}else{
+			
+			g.setColor(new Color(128, 0, 0));
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+			
+			g.setFont(new Font("Arial", Font.BOLD, 120));
+			for(int i = 0; i < menuOptions.length; i++){
+				if(i == optionSelected){
+					g.setColor(new Color(255, 128, 0));
+				}else{
+					g.setColor(new Color(255, 0, 0));
+				}
+				g.drawString(menuOptions[i], (WIDTH/2) - 200, (i*200)+300);
+			}
+		}
+		
+	}
+
+	public void tick() {
+		if(optionSelected >= menuOptions.length){
+			optionSelected = 0;
+		}else if(optionSelected < 0){
+			optionSelected = menuOptions.length - 1;
+		}
+		
+		menuSwitch.tick();
+		if(menuSwitch.timeOver()){
+			canInput = true;
+		}
+		
+		inputStart.tick();
+		if(inputStart.timeOver()){
+			canSwitchMenuOption = true;
+		}
+	}
+
+	public void init() {
+		optionSelected = 0;
+		menuOptions = new String[2];
+		menuOptions[0] = "Archer";
+		menuOptions[1] = "Mage";
+		reset(true);
+	}
+
+	public void input(KeyInputDevice[] keys, MouseInputDevice[] mousebuttons) {
+		if(keys[0].getPressed() && canSwitchMenuOption){
+			optionSelected = 1;
+			canSwitchMenuOption = false;
+			menuSwitch.reset();
+		}else if(keys[1].getPressed() && canSwitchMenuOption){
+			optionSelected = 0;
+			canSwitchMenuOption = false;
+			menuSwitch.reset();
+		}
+		
+		if(renderLoad){
+			switchState = OVERWORLD_STATE;
+		}
+		
+		if(keys[6].getPressed() && optionSelected == 0 && canInput){
+			playerClass = "Archer";
+			renderLoad = true;
+		}
+		
+		if(keys[6].getPressed() && optionSelected == 1  && canInput){
+			playerClass = "Mage";
+			renderLoad = true;
+		}
+		
+		if(keys[5].getPressed()){
+			System.exit(-1);
+		}
+	}
+	
+	public void reset(boolean fullReset) {
+		switchState = -1;
+		canInput = false;
+		canSwitchMenuOption = false;
+		inputStart.reset();
+		menuSwitch.reset();
+		renderLoad = false;
+	}
+	
+	public String getPlayerClass(){
+		return playerClass;
+	}
+	
+}

@@ -1,0 +1,250 @@
+package main.level;
+
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import main.graphics.SpriteSheet;
+import main.level.tiles.ArrowTurretTile;
+import main.level.tiles.Dungeon1Tile;
+import main.level.tiles.Dungeon2Tile;
+import main.level.tiles.Dungeon3Tile;
+import main.level.tiles.GrassTile;
+import main.level.tiles.NullTile;
+import main.level.tiles.StoneFloorTile;
+import main.level.tiles.StoneWallTile;
+import main.level.tiles.Tile;
+import main.level.tiles.WaterTile;
+import main.level.tiles.WoodFloorTile;
+
+public class Terrain {
+	
+	int width, height;
+	Tile[][] tileMap;
+	BufferedImage levelImage;
+	String levelPath;
+	SpriteSheet levelSprites;
+	SpriteSheet projectileSprites;
+	int tilewidth;
+	int xRenderDistance = 40;
+	int yRenderDistance = 25;
+	
+	public Terrain(int w, int h, int tilew, String levelP, SpriteSheet spriteSheet, SpriteSheet projectileS){
+		width = w;
+		height = h;
+		tileMap = new Tile[width][height];
+		levelPath = levelP;
+		tilewidth = tilew;
+		levelSprites = spriteSheet;
+		projectileSprites = projectileS;
+		try {
+		    levelImage = ImageIO.read(new File(levelPath));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		loadTileMap();
+	}
+	
+	public void tick(){
+		
+		for(int y = 0; y < height; y++){
+			for(int x = 0; x < width; x++){
+				tileMap[x][y].tick();
+			}
+		}
+		
+	}
+	
+	public int getTileWidth(){
+		return tilewidth;
+	}
+	
+	public int getWidth(){
+		return width;
+	}
+	
+	public int getHeight(){
+		return height;
+	}
+	
+	public void loadTileMap(){
+		
+		for(int y = 0; y < height; y++){
+			for(int x = 0; x < width; x++){
+				
+				String hexcode = Integer.toHexString(levelImage.getRGB(x,y));
+				
+				if(y <= 0 && x <= 0){
+					
+					if(hexcode.equals("ff00ff00")){
+						tileMap[x][y] = new GrassTile(x, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff0000ff")){
+						tileMap[x][y] = new WaterTile(x, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff646464")){
+						tileMap[x][y] = new StoneWallTile(x, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff966e5a")){
+						tileMap[x][y] = new WoodFloorTile(x, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ffaaaaaa")){
+						tileMap[x][y] = new StoneFloorTile(x, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff000001")){
+						tileMap[x][y] = new Dungeon1Tile(x, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff000002")){
+						tileMap[x][y] = new Dungeon2Tile(x, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff000003")){
+						tileMap[x][y] = new Dungeon3Tile(x, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ffbbbbbb")){
+						tileMap[x][y] = new ArrowTurretTile(x, y, tilewidth, tilewidth, levelSprites, projectileSprites, this);
+					}else{
+						tileMap[x][y] = new NullTile(x, y, tilewidth, tilewidth);
+					}
+					
+				}else if(y <= 0 && !(x <= 0)){
+					
+					if(hexcode.equals("ff00ff00")){
+						tileMap[x][y] = new GrassTile(x * tilewidth, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff0000ff")){
+						tileMap[x][y] = new WaterTile(x * tilewidth, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff646464")){
+						tileMap[x][y] = new StoneWallTile(x * tilewidth, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff966e5a")){
+						tileMap[x][y] = new WoodFloorTile(x * tilewidth, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ffaaaaaa")){
+						tileMap[x][y] = new StoneFloorTile(x * tilewidth, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff000001")){
+						tileMap[x][y] = new Dungeon1Tile(x * tilewidth, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff000002")){
+						tileMap[x][y] = new Dungeon2Tile(x * tilewidth, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff000003")){
+						tileMap[x][y] = new Dungeon3Tile(x * tilewidth, y, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ffbbbbbb")){
+						tileMap[x][y] = new ArrowTurretTile(x * tilewidth, y, tilewidth, tilewidth, levelSprites, projectileSprites, this);
+					}else{
+						tileMap[x][y] = new NullTile(x * tilewidth, y, tilewidth, tilewidth);
+					}
+					
+				}else if(!(y <= 0) && x <= 0){
+					
+					if(hexcode.equals("ff00ff00")){
+						tileMap[x][y] = new GrassTile(x, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff0000ff")){
+						tileMap[x][y] = new WaterTile(x, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff646464")){
+						tileMap[x][y] = new StoneWallTile(x, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff966e5a")){
+						tileMap[x][y] = new WoodFloorTile(x, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ffaaaaaa")){
+						tileMap[x][y] = new StoneFloorTile(x, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff000001")){
+						tileMap[x][y] = new Dungeon1Tile(x, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff000002")){
+						tileMap[x][y] = new Dungeon2Tile(x, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff000003")){
+						tileMap[x][y] = new Dungeon3Tile(x, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ffbbbbbb")){
+						tileMap[x][y] = new ArrowTurretTile(x, y * tilewidth, tilewidth, tilewidth, levelSprites, projectileSprites, this);
+					}else{
+						tileMap[x][y] = new NullTile(x, y * tilewidth, tilewidth, tilewidth);
+					}
+				
+				}else{
+					
+					if(hexcode.equals("ff00ff00")){
+						tileMap[x][y] = new GrassTile(x * tilewidth, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff0000ff")){
+						tileMap[x][y] = new WaterTile(x * tilewidth, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff646464")){
+						tileMap[x][y] = new StoneWallTile(x * tilewidth, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff966e5a")){
+						tileMap[x][y] = new WoodFloorTile(x * tilewidth, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ffaaaaaa")){
+						tileMap[x][y] = new StoneFloorTile(x * tilewidth, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff000001")){
+						tileMap[x][y] = new Dungeon1Tile(x * tilewidth, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff000002")){
+						tileMap[x][y] = new Dungeon2Tile(x * tilewidth, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ff000003")){
+						tileMap[x][y] = new Dungeon3Tile(x * tilewidth, y * tilewidth, tilewidth, tilewidth, levelSprites);
+					}else if(hexcode.equals("ffbbbbbb")){
+						tileMap[x][y] = new ArrowTurretTile(x * tilewidth, y * tilewidth, tilewidth, tilewidth, levelSprites, projectileSprites, this);
+					}else{
+						tileMap[x][y] = new NullTile(x * tilewidth, y * tilewidth, tilewidth, tilewidth);
+					}
+					
+				}
+			}
+		}
+		levelImage.flush();
+	}
+	
+	public Tile getTileFromTileMap(int x, int y){
+		return tileMap[x][y];
+	}
+	
+	public Tile getPosTile(int px, int py){
+		int tx = (int) Math.floor(px/tilewidth);
+		int ty = (int) Math.floor(py/tilewidth);
+		
+		if(tx >= width - 1){
+			tx = width - 1;
+		}
+		
+		if(ty >= height - 1){
+			ty = height - 1;
+		}
+		
+		if(tx <= 0){
+			tx = 0;
+		}
+		
+		if(ty <= 0){
+			ty = 0;
+		}
+		
+		return tileMap[tx][ty];
+	}
+	
+	public Tile[][] getTileMap(){
+		return tileMap;
+	}
+	
+	public void flushTerrainData(){
+		for(int y = 0; y < height; y++){
+			for(int x = 0; x < width; x++){
+				tileMap[x][y].flushTile();
+			}
+		}
+	}
+	
+	public void render(Graphics g, int X, int Y){
+		
+		int mintx = (int) Math.floor(X/tilewidth);
+		int minty = (int) Math.floor(Y/tilewidth);
+		int maxtx = ((int) Math.floor(X/tilewidth) + xRenderDistance);
+		int maxty = ((int) Math.floor(Y/tilewidth) + yRenderDistance);
+		
+		if(maxtx >= width){
+			maxtx = width;
+		}
+		
+		if(maxty >= height){
+			maxty = height;
+		}
+		
+		if(mintx <= 0){
+			mintx = 0;
+		}
+		
+		if(minty <= 0){
+			minty = 0;
+		}
+		
+		for(int y = minty; y < maxty; y++){
+			for(int x = mintx; x < maxtx; x++){
+				tileMap[x][y].render(g);
+			}
+		}
+	}
+}

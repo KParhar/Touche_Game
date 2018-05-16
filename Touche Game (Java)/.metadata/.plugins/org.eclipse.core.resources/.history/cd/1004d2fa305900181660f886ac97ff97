@@ -1,0 +1,25 @@
+package main.level.tiles;
+
+import java.awt.Graphics;
+
+public class NullTile extends Tile{
+
+	public NullTile(int X, int Y, int W, int H) {
+		super(X, Y, W, H, false, null);
+	}
+
+	public void render(Graphics g) {
+	}
+
+	public void tick() {
+	}
+	
+	public boolean isEventTile() {
+		return false;
+	}
+	
+	public boolean isTurretTile() {
+		return false;
+	}
+
+}

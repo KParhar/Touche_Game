@@ -1,0 +1,49 @@
+package main.game_states;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+import main.Timer;
+import main.graphics.SpriteSheet;
+import main.input.KeyInputDevice;
+import main.input.MouseInputDevice;
+
+public class Death_State extends GameState{
+
+	SpriteSheet deathScreen;
+	Timer menuSwitch = new Timer(60, true);
+	boolean closeGame;
+	
+	public void render(Graphics g) {
+		g.setColor(new Color(128, 0, 0));
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.drawImage(deathScreen.getSprite(0, 0, 51, 29, HEIGHT * 2, HEIGHT), 0 + 10, 0, null);
+	}
+
+	public void tick() {
+		menuSwitch.tick();
+		if(menuSwitch.timeOver()){
+			closeGame = true;
+		}
+	}
+
+	public void init() {
+		deathScreen = new SpriteSheet("res/Death Screen.png");
+		reset(true);
+	}
+
+	public void input(KeyInputDevice[] keys, MouseInputDevice[] mousebuttons) {
+		if(keys[7].getPressed() && closeGame){
+			//System.exit(-1);
+			switchState = MENU_STATE;
+		}
+	}
+	
+	public void reset(boolean fullReset) {
+		switchState = -1;
+		closeGame = false;
+		renderLoad = false;
+		menuSwitch.reset();
+	}
+
+}

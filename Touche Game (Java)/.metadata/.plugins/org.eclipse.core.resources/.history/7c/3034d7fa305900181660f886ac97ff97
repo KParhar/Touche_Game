@@ -1,0 +1,29 @@
+package main.level.tiles;
+
+import java.awt.Graphics;
+import main.graphics.SpriteSheet;
+
+public class GrassTile extends Tile{
+	
+	public GrassTile(int X, int Y, int W, int H, SpriteSheet s) {
+		super(X, Y, W, H, false, s);
+		tile = s.getSprite(0, 0, 15, 15, 50, 50);
+	}
+	
+	public void tick(){
+		
+	}
+
+	public void render(Graphics g) {
+		g.drawImage(tile, x, y, null);
+	}
+	
+	public boolean isEventTile() {
+		return false;
+	}
+	
+	public boolean isTurretTile() {
+		return false;
+	}
+
+}

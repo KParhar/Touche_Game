@@ -1,0 +1,24 @@
+package main.level.tiles;
+
+import main.graphics.SpriteSheet;
+
+public abstract class EventTile extends Tile{
+
+	int event;
+	
+	public EventTile(int X, int Y, int W, int H, boolean collidable, SpriteSheet s) {
+		super(X, Y, W, H, collidable, s);
+	}
+
+	public int getEvent(){
+		return event;
+	}
+	
+	public void setEvent(int e){
+		event = e;
+	}
+	
+	public boolean isEventTile() {
+		return true;
+	}
+}

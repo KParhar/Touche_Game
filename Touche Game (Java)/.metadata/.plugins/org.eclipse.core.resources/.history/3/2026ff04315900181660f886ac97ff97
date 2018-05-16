@@ -1,0 +1,134 @@
+package main.entities.mobs.enemies;
+
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import main.entities.mobs.playerClasses.Player;
+import main.graphics.Animation;
+import main.graphics.SpriteSheet;
+import main.level.Terrain;
+
+public class MimicBoss extends Enemy{
+	
+	int movementThreshold = 10;
+	
+	public MimicBoss(int X, int Y, int W, int H,
+			SpriteSheet spritesheet, Terrain t, Player p) {
+		super(X, Y, W, H, 0, 0, 25, 1500, true, spritesheet, t, p);
+		init();
+		hitbox = new Rectangle((int)x, (int)y + (height/10), width, height);
+	}
+
+	public void death() {
+		isDead = true;
+	}
+
+	public void move(int direction, int speed) {
+		if(direction == 0){ 
+			yvel = speed;
+		}
+		else if(direction == 1){
+			yvel = -speed;
+		}
+		else if(direction == 2){
+			xvel = speed;
+		}
+		else if(direction == 3){
+			xvel = -speed;
+		}
+		animations[currentAnimation].play();
+	}
+
+	public void stopMovingX() {
+		xvel = 0;
+		animations[2].stop();
+		animations[3].stop();
+	}
+
+	public void stopMovingY() {
+		yvel = 0;
+		animations[0].stop();
+		animations[1].stop();
+	}
+
+	public void loadAnimations() {
+		animations[0] = new Animation(20);
+		animations[1] = new Animation(20);
+		animations[2] = new Animation(20);
+		animations[3] = new Animation(20);
+		
+		animations[0].addFrame(entitySpriteSheet.getSprite(0, 0, 15, 15, width, height));
+		animations[0].addFrame(entitySpriteSheet.getSprite(16, 0, 15, 15, width, height));
+		animations[0].addFrame(entitySpriteSheet.getSprite(32, 0, 15, 15, width, height));
+
+		animations[1].addFrame(entitySpriteSheet.getSprite(0, 16, 15, 15, width, height));
+		animations[1].addFrame(entitySpriteSheet.getSprite(16, 16, 15, 15, width, height));
+		animations[1].addFrame(entitySpriteSheet.getSprite(32, 16, 15, 15, width, height));
+		
+		animations[2].addFrame(entitySpriteSheet.getSprite(48, 0, 15, 15, width, height));
+		animations[2].addFrame(entitySpriteSheet.getSprite(64, 0, 15, 15, width, height));
+		animations[2].addFrame(entitySpriteSheet.getSprite(80, 0, 15, 15, width, height));
+
+		animations[3].addFrame(entitySpriteSheet.getSprite(48, 16, 15, 15, width, height));
+		animations[3].addFrame(entitySpriteSheet.getSprite(64, 16, 15, 15, width, height));
+		animations[3].addFrame(entitySpriteSheet.getSprite(80, 16, 15, 15, width, height));
+
+		animations[0].play();
+		animations[1].play();
+		animations[2].play();
+		animations[3].play();
+	}
+
+	public void init() {
+		numOfAnimations = 4;
+		currentAnimation = 0;
+		animations = new Animation[numOfAnimations];
+		load();
+	}
+
+	public void load() {
+		loadAnimations();
+	}
+
+	public void render(Graphics g) {
+		animations[currentAnimation].render(g, (int)x, (int)y);
+	}
+
+	public void tick() {
+		
+		hitbox.setLocation((int)x, (int)y + 10);
+		
+		animations[currentAnimation].animate();
+		
+		if(player.getCenterY() > getCenterY() && Math.abs(player.getCenterY() - getCenterY()) > movementThreshold){
+			move(0, 1);
+			currentAnimation = 0;
+		}else if(player.getCenterY() < getCenterY() && Math.abs(player.getCenterY() - getCenterY()) > movementThreshold){
+			move(1, 1);
+			currentAnimation = 1;
+		}else if(!(Math.abs(player.getCenterY() - getCenterY()) > movementThreshold)){
+			stopMovingY();
+		}
+		
+		if(player.getCenterX() > getCenterX() && Math.abs(player.getCenterX() - getCenterX()) > movementThreshold){
+			move(2, 1);
+			currentAnimation = 2;
+		}else if(player.getCenterX() < getCenterX() && Math.abs(player.getCenterX() - getCenterX()) > movementThreshold){
+			move(3, 1);
+			currentAnimation = 3;
+		}else if(!(Math.abs(player.getCenterX() - getCenterX()) > movementThreshold)){
+			stopMovingX();
+		}
+		
+		if(!(tileCollision((int)xvel, 0))){
+			x += xvel;
+		}
+		
+		if(!(tileCollision(0, (int)yvel))){
+			y += yvel;
+		}
+		
+		checkHealth();
+	}
+
+}
+

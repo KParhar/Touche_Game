@@ -1,0 +1,23 @@
+package main.entities;
+
+import java.awt.Graphics;
+import java.awt.Rectangle;
+
+import main.graphics.SpriteSheet;
+
+public class HealthPacks extends Entity{
+
+	public HealthPacks(int X, int Y, int W, int H, SpriteSheet spritesheet) {
+		super(X, Y, W, H, 0, 0, spritesheet);
+		hitbox = new Rectangle((int)x, (int)y, width, height);
+	}
+
+	public void render(Graphics g) {
+		g.drawImage(entitySpriteSheet.getSprite(0, 8, 7, 7, width, height), (int)x, (int)y, null);
+	}
+
+	public void tick() {
+		
+	}
+
+}

@@ -1,0 +1,27 @@
+package main.level.tiles;
+
+import java.awt.Graphics;
+
+import main.game_states.GameState;
+import main.graphics.SpriteSheet;
+
+public class Dungeon2Tile extends EventTile{
+
+	public Dungeon2Tile(int X, int Y, int W, int H, SpriteSheet s) {
+		super(X, Y, W, H, false, s);
+		tile = s.getSprite(16, 64, 15, 15, W, H);
+		setEvent(GameState.DUNGEON2_STATE);
+	}
+
+	public void render(Graphics g) {
+		g.drawImage(tile, x, y, null);
+	}
+
+	public void tick() {
+		
+	}
+	
+	public boolean isTurretTile() {
+		return false;
+	}
+}

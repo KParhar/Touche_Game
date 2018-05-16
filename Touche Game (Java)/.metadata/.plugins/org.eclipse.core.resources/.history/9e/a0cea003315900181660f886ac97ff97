@@ -1,0 +1,50 @@
+package main.entities.mobs.npc;
+
+import java.awt.Graphics;
+
+import main.graphics.SpriteSheet;
+import main.level.Terrain;
+
+public class Kington extends NPC{
+
+	public Kington(int X, int Y, int W, int H, Terrain t) {
+		super(X, Y, W, H, 0, 0, 999999999, new SpriteSheet("res/SpriteSheets/NPC_Spritesheet.png"), t);
+	}
+
+	public void death() {
+		
+	}
+
+	public void move(int direction, int speed) {
+		
+	}
+
+	public void stopMovingX() {
+		
+	}
+	
+	public void stopMovingY() {
+		
+	}
+
+	public void loadAnimations() {
+		
+	}
+
+	public void init() {
+		
+	}
+
+	public void load() {
+		
+	}
+
+	public void render(Graphics g) {
+		g.drawImage(entitySpriteSheet.getSprite(0, 0, 15, 15, width, height), (int)x, (int)y, null);
+	}
+
+	public void tick() {
+		
+	}
+
+}

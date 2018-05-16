@@ -1,0 +1,51 @@
+package main.entities;
+
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import main.graphics.SpriteSheet;
+
+public abstract class Entity {
+
+	protected double x, y, xvel, yvel;
+	protected int width, height;
+	protected boolean canMoveX;
+	protected boolean canMoveY;
+	protected SpriteSheet entitySpriteSheet;
+	protected Rectangle hitbox;
+	
+	public Entity(int X, int Y, int W, int H, double xVEL, double yVEL, SpriteSheet spritesheet){
+		x = X;
+		y = Y;
+		width = W;
+		height = H;
+		xvel = xVEL;
+		yvel = yVEL;
+		entitySpriteSheet = spritesheet;
+		canMoveX = true;
+		canMoveY = true;
+	}
+	
+	public abstract void render(Graphics g);
+	public abstract void tick();
+	
+	public void setX(int X){ x = X; }
+	public void setY(int Y){ y = Y; }
+	public void setWidth(int WIDTH){ width = WIDTH; }
+	public void setHeight(int HEIGHT){ height = HEIGHT; }
+	public void setXVel(double XVEL){ xvel = XVEL; }
+	public void setYVel(double YVEL){ yvel = YVEL; }
+	public void setSpriteSheet(SpriteSheet s){ entitySpriteSheet = s; }
+	
+	public double getX(){ return x; }
+	public double getY(){ return y; }
+	public double getCenterX(){ return (x + (width/2)); }
+	public double getCenterY(){ return (y + (height/2)); }
+	public int getWidth(){ return width; }
+	public int getHeight(){ return height; }
+	public double getXVel(){ return xvel; }
+	public double getYVel(){ return yvel; }
+	public SpriteSheet getSpriteSheet(){ return entitySpriteSheet; }
+	public Rectangle getHitBox(){ return hitbox; }
+	
+	
+}

@@ -1,0 +1,218 @@
+package main.game_states;
+
+import java.awt.Graphics;
+import java.util.ArrayList;
+
+import main.Timer;
+import main.entities.HealthPacks;
+import main.entities.mobs.enemies.Enemy;
+import main.entities.mobs.enemies.MimicBoss;
+import main.entities.mobs.enemies.MimicEnemy;
+import main.entities.mobs.playerClasses.Archer;
+import main.entities.mobs.playerClasses.Mage;
+import main.entities.mobs.playerClasses.Player;
+import main.entities.projectiles.Projectile;
+import main.graphics.Camera;
+import main.graphics.SpriteSheet;
+import main.graphics.HUD.HealthHUD;
+import main.input.KeyInputDevice;
+import main.input.MouseInputDevice;
+import main.level.Terrain;
+import main.level.tiles.ArrowTurretTile;
+
+public class Dungeon1_State extends GameState{
+	
+	ArrayList<Projectile> playerProjectiles = new ArrayList<>();
+	ArrayList<Projectile> turretProjectiles = new ArrayList<>();
+	ArrayList<Enemy> enemies = new ArrayList<>();
+	ArrayList<HealthPacks> healthPacks = new ArrayList<>();
+	HealthHUD healthHUD;
+	Camera camera;
+	Player player;
+	Terrain level1;
+	int currentEnemy;
+	
+	boolean switchLevDead;
+	Timer switchTimer;
+	
+	public void render(Graphics g) {
+		if(renderLoad){
+			renderLoading(g);
+		}else{
+			camera.render(g);
+	    	//Render Level
+	    	level1.render(g, -camera.getXOffset(), -camera.getYOffset());
+	    	player.render(g);
+	    	for(int i = 0; i < playerProjectiles.size(); i++){
+	        	playerProjectiles.get(i).render(g);
+	        }
+	    	for(int i = 0; i < turretProjectiles.size(); i++){
+	        	turretProjectiles.get(i).render(g);
+	        }
+	    	for(int i = 0; i < enemies.size(); i++){
+	        	enemies.get(i).render(g);
+	        }
+	    	for(int i = 0; i < healthPacks.size(); i++){
+	        	healthPacks.get(i).render(g);
+	        }
+	    	healthHUD.RenderHUD(g, -camera.getXOffset() - 10, -camera.getYOffset() + 10, player);
+		}
+	}
+
+	public void tick() {
+		level1.tick();
+    	
+        player.tick();
+        
+        for(int i = 0; i < healthPacks.size(); i++){
+        	if(player.getHitBox().intersects(healthPacks.get(i).getHitBox())){
+        		healthPacks.remove(i);
+        		player.addHP(50);
+        	}
+        }
+        
+        if(player.isDead()){
+        	switchState = GameState.DEATH_STATE;
+        }
+        
+        if(renderLoad){
+        	switchState = GameState.OVERWORLD_STATE;
+        }
+        
+        if(enemies.get(enemies.size() - 1).getDeadSwitch()){
+        	switchTimer.tick();
+        	System.out.println("ticking time");
+        	if(switchTimer.timeOver()){
+        		renderLoad = true;
+        		System.out.println("renderload true");
+        	}
+        }
+        
+        for(int i = 0; i < enemies.size(); i++){
+        	enemies.get(i).tick();
+        	
+        	if(player.getHitBox().intersects(enemies.get(i).getHitBox())){
+        		player.takeEnemyDamage(enemies.get(i).getDamage());
+        	}
+        	
+        	if(enemies.get(i).isDead()){
+        		enemies.get(i).setDeadSwitch(true);
+        		enemies.get(i).setX(-500);
+        		enemies.get(i).setY(-500);
+        		currentEnemy++;
+        		enemies.get(i).setHealth(100);
+        		enemies.get(i).setDeath(false);
+        	}
+        }
+        
+        for(int i = 0; i < playerProjectiles.size(); i++){
+        	playerProjectiles.get(i).tick();
+        	for(int ei = 0; ei < enemies.size(); ei++){
+        		if(playerProjectiles.get(i).getHitBox().intersects(enemies.get(ei).getHitBox())){
+        			enemies.get(ei).subtractHealth(playerProjectiles.get(i).getDamage());
+        			playerProjectiles.get(i).setRemove(true);
+        		}
+        	}
+        	if(playerProjectiles.get(i).remove()){
+        		playerProjectiles.remove(i);
+        	}
+        }
+        for(int i = 0; i < turretProjectiles.size(); i++){
+        	turretProjectiles.get(i).tick();
+        	if(turretProjectiles.get(i).remove()){
+        		turretProjectiles.remove(i);
+        	}
+        }
+        
+        for(int i = 0; i < turretProjectiles.size(); i++){
+        	if(player.getHitBox().intersects(turretProjectiles.get(i).getHitBox())){
+				int damage = turretProjectiles.get(i).getDamage();
+        		turretProjectiles.remove(i);
+        		player.subtractHealth(damage);
+        	}
+        }
+        
+        camera.cameraTerrainDetection(level1, player);
+        
+        for(int x = 0; x < level1.getWidth(); x++){
+        	for(int y = 0; y < level1.getHeight(); y++){
+        		if(level1.getTileFromTileMap(x, y).isTurretTile()){
+        			if(((ArrowTurretTile) level1.getTileFromTileMap(x, y)).canFire()){
+        				turretProjectiles.addAll(((ArrowTurretTile) level1.getTileFromTileMap(x, y)).fireProjectiles());
+        			}
+        		}
+        	}
+        }
+	}
+
+	public void init() {
+		level1 = new Terrain(64, 64, 50, "res/Levels/Dungeon1.png", new SpriteSheet("res/SpriteSheets/Terrain_Spritesheet.png"), new SpriteSheet("res/SpriteSheets/Projectile_Spritesheet.png"));
+    	
+		if(playerType.equals("Mage")){
+			player = new Mage(150, 150, 48, 48, new SpriteSheet("res/SpriteSheets/Player_Spritesheet.png"), level1);
+		}
+		
+		if(playerType.equals("Archer")){
+			player = new Archer(150, 150, 48, 48, new SpriteSheet("res/SpriteSheets/Player_Spritesheet.png"), level1);
+		}
+		
+		healthPacks.add(new HealthPacks(4*50, 4*50, 50, 50, new SpriteSheet("res/SpriteSheets/HUD_Effects_SpriteSheet.png")));
+		healthPacks.add(new HealthPacks(49*50, 57*50, 50, 50, new SpriteSheet("res/SpriteSheets/HUD_Effects_SpriteSheet.png")));
+		
+		currentEnemy = 0;
+		enemies.add(new MimicEnemy(54*50, 14*50, 101, 101, new SpriteSheet("res/SpriteSheets/Enemy_Spritesheet.png"), level1, player));
+		enemies.add(new MimicEnemy(54*50, 44*50, 101, 101, new SpriteSheet("res/SpriteSheets/Enemy_Spritesheet.png"), level1, player));
+		enemies.add(new MimicBoss(7*50, 44*50, 500, 500, new SpriteSheet("res/SpriteSheets/Enemy_Spritesheet.png"), level1, player));
+		
+    	healthHUD = new HealthHUD(new SpriteSheet("res/SpriteSheets/HUD_Effects_Spritesheet.png"));
+    	camera = new Camera(0, 0, WIDTH, HEIGHT);
+    	
+    	switchLevDead = false;
+    	switchTimer = new Timer(240, true);
+    	
+    	reset(true);
+	}
+
+	public void input(KeyInputDevice[] keys, MouseInputDevice[] mousebuttons) {
+		
+		if(keys[4].getPressed()){
+    		if(player.CanFireBasicAttack() && currentEnemy < enemies.size()){
+    			playerProjectiles.add(player.attack((int)enemies.get(currentEnemy).getCenterX(), (int)enemies.get(currentEnemy).getCenterY()));
+    		}
+    	}
+		
+    	if(keys[2].getPressed()){
+    		player.move(2, 3);
+    	}else if(keys[3].getPressed()){
+    		player.move(3, 3);
+    	}else{
+    		player.stopMovingX();
+    	}
+    	
+    	if(keys[0].getPressed()){
+    		player.move(0, 3);
+    	}else if(keys[1].getPressed()){
+    		player.move(1, 3);
+    	}else{
+    		player.stopMovingY();
+    	}
+    	
+    	if(keys[5].getPressed()){
+    		System.exit(-1);
+    	}
+	}
+
+	public void reset(boolean fullReset) {
+		switchState = -1;
+		renderLoad = false;
+		player.setDeath(false);
+		player.setHealth(100);
+		player.setX(150);
+		player.setY(150);
+		camera.setCameraPos(0, 0);
+		camera.cameraTerrainDetection(level1, player);
+        playerProjectiles.clear();
+        turretProjectiles.clear();
+	}
+	
+}

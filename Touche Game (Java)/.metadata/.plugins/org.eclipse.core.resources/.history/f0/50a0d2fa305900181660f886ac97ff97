@@ -1,0 +1,33 @@
+package main.level.tiles;
+
+import java.awt.Graphics;
+import main.graphics.SpriteSheet;
+
+public class WaterTile extends AnimatedTile{
+	
+	static int waterAnimationSpeed = 30;
+	
+	public WaterTile(int X, int Y, int W, int H, SpriteSheet s) {
+		super(X, Y, W, H, waterAnimationSpeed, true, s);
+		addFrame(s.getSprite(0, 16, 15, 15, 50, 50));
+		addFrame(s.getSprite(16, 16, 15, 15, 50, 50));
+		addFrame(s.getSprite(32, 16, 15, 15, 50, 50));
+		playAnimation();
+	}
+	
+	public void tick(){
+		animate();
+	}
+	
+	public void render(Graphics g) {
+		tileAnimation.render(g, x, y);
+	}
+	
+	public boolean isEventTile() {
+		return false;
+	}
+	
+	public boolean isTurretTile() {
+		return false;
+	}
+}

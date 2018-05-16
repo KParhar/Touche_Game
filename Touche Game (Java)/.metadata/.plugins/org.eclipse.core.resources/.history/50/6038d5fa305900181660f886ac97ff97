@@ -1,0 +1,44 @@
+package main.level.tiles;
+
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import main.graphics.SpriteSheet;
+
+public abstract class Tile {
+	
+	protected boolean isCollidable;
+	protected int x, y, w, h;
+	protected BufferedImage tile;
+	protected SpriteSheet sprites;
+	
+	public Tile(int X, int Y, int W, int H, boolean collidable, SpriteSheet s){
+		x = X;
+		y = Y;
+		w = W;
+		h = H;
+		isCollidable = collidable;
+		sprites = s;
+	}
+	
+	public boolean checkCollidable(){
+		return isCollidable;
+	}
+	
+	public abstract boolean isEventTile();
+	public abstract boolean isTurretTile();
+	public abstract void render(Graphics g);
+	public abstract void tick();
+	
+	public int getX(){
+		//X GONNA GIVE IT TO YA	
+		return x;
+	}
+	
+	public int getY(){
+		return y;
+	}
+	
+	public void flushTile(){
+		tile.flush();
+	}
+}

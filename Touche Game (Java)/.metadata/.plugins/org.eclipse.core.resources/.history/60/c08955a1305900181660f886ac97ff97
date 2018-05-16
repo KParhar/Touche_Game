@@ -1,0 +1,78 @@
+package main.GUI;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.Iterator;
+
+import javax.swing.JPanel;
+
+import system.main.navigation.Node;
+import system.main.navigation.Schematic;
+
+public class SchematicPanel extends JPanel{
+	
+	Schematic schem;
+	int tileWidth;
+	int tileHeight;
+	
+	public SchematicPanel() {
+		schem = null;
+	}
+	
+	public void setSchem(Schematic s) {
+		schem = s;
+	}
+	
+	public int getTileWidth() {
+		return tileWidth;
+	}
+	
+	public int getTileHeight() {
+		return tileHeight;
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if(schem != null)
+		{
+			g.setColor(Color.WHITE);
+			g.fillRect(0, 0, this.getWidth(), this.getHeight());
+			
+			tileWidth = this.getWidth()/schem.getWidth();
+			tileHeight = this.getHeight()/schem.getHeight();
+			
+			g.setColor(Color.BLACK);
+			for(int y = 0; y < schem.getHeight(); y++) {
+				for(int x = 0; x < schem.getWidth(); x++) {
+					if(schem.getCollisionMap()[y][x]) {
+						g.fillRect(x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+					}
+					g.drawRect(x*tileWidth, y*tileHeight, tileWidth, tileHeight);
+				}
+			}
+			
+			g.setColor(Color.BLUE);
+			Iterator i = schem.getNodePath().iterator();
+			while(i.hasNext())	{
+				Node n = (Node) i.next();
+				g.fillRect(n.getX()*tileWidth, n.getY()*tileHeight, tileWidth, tileHeight);
+			}
+			
+			if(schem.getStartX() != -1 && schem.getStartY() != -1) {
+				g.setColor(Color.GREEN);
+				g.fillRect(schem.getStartX() * tileWidth, schem.getStartY() * tileHeight, tileWidth, tileHeight);
+			}
+			
+			if(schem.getEndX() != -1 && schem.getEndY() != -1) {
+				g.setColor(Color.RED);
+				g.fillRect(schem.getEndX() * tileWidth, schem.getEndY() * tileHeight, tileWidth, tileHeight);
+			}
+			
+		} else {
+			g.setColor(Color.GRAY);
+			g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		}
+	}
+	
+}

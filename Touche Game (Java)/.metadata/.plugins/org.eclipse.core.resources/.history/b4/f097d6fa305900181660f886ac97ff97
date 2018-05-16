@@ -1,0 +1,40 @@
+package main.level.tiles;
+
+import java.util.ArrayList;
+
+import main.Timer;
+import main.entities.projectiles.Projectile;
+import main.graphics.SpriteSheet;
+import main.level.Terrain;
+
+public abstract class TurretTile extends Tile{
+
+	int timeDelay;
+	Timer attackTimer;
+	boolean canFire = true;
+	SpriteSheet projectileSpriteSheet;
+	Terrain terr;
+	
+	public TurretTile(int X, int Y, int W, int H, int tDelay, SpriteSheet ts, SpriteSheet ps, Terrain t) {
+		super(X, Y, W, H, true, ts);
+		timeDelay = tDelay;
+		terr = t;
+		attackTimer = new Timer(timeDelay, true);
+		projectileSpriteSheet = ps;
+	}
+	
+	public boolean canFire(){
+		return canFire;
+	}
+	
+	public boolean isEventTile(){
+		return false;
+	}
+	
+	public boolean isTurretTile() {
+		return true;
+	}
+	
+	public abstract ArrayList<Projectile> fireProjectiles();
+
+}

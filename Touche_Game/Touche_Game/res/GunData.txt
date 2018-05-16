@@ -1,3 +1,0 @@
-Name=Pistol ArmJoint={8,15} ArmEnd={32,32} SpritesheetID={0,1} AnimationSpeed=50 GunFireRate=500 GunRecoil=0.5 GunType=SEMI BulletID=0
-Name=Shotgun ArmJoint={8,15} ArmEnd={32,32} SpritesheetID={0,1} AnimationSpeed=50 GunFireRate=2000 GunRecoil=1.5 GunType=SINGLE BulletID=0
-Name=SMG ArmJoint={8,15} ArmEnd={32,32} SpritesheetID={0,1} AnimationSpeed=50 GunFireRate=50 GunRecoil=0.05 GunType=AUTO BulletID=0

@@ -1,0 +1,34 @@
+package main.level.tiles;
+
+import java.awt.image.BufferedImage;
+
+import main.graphics.Animation;
+import main.graphics.SpriteSheet;
+
+public abstract class AnimatedTile extends Tile{
+
+	Animation tileAnimation;
+	int animationSpeed;
+	
+	public AnimatedTile(int X, int Y, int W, int H, int aniSpeed, boolean collidable, SpriteSheet s) {
+		super(X, Y, W, H, collidable, s);
+		animationSpeed = aniSpeed;
+		tileAnimation = new Animation(animationSpeed);
+	}
+	
+	public void animate(){
+		tileAnimation.animate();
+	}
+	
+	public void playAnimation(){
+		tileAnimation.play();
+	}
+	
+	public void stopAnimation(){
+		tileAnimation.stop();
+	}
+	
+	public void addFrame(BufferedImage frame){
+		tileAnimation.addFrame(frame);
+	}
+}

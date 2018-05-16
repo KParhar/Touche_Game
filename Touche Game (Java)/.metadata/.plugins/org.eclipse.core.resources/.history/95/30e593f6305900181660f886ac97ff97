@@ -1,0 +1,73 @@
+package main.graphics;
+
+import java.awt.Graphics;
+
+import main.entities.mobs.playerClasses.Player;
+import main.level.Terrain;
+
+public class Camera {
+	
+	int xOffset;
+	int yOffset;
+	int screenWidth;
+	int screenHeight;
+	
+	public Camera(int x, int y, int w, int h){
+		xOffset = -x;
+		yOffset = -y;
+		screenWidth = w;
+		screenHeight = h;
+	}
+	
+	public void setCameraPos(int x, int y){
+		xOffset = -x;
+		yOffset = -y;
+	}
+	
+	public void cameraTerrainDetection(Terrain t, Player p){
+		
+		if((p.getY() - getHeight() > (0 - getHeight()/2) && p.getY() < ((t.getHeight() * t.getTileWidth()) - getHeight()/2))){
+    		setYOffset((int)p.getY() - (getHeight()/2));
+    	}
+    	
+    	if((p.getX() - getWidth() > (0 - getWidth()/2) && p.getX() < ((t.getWidth() * t.getTileWidth()) - getWidth()/2))){
+    		setXOffset((int)p.getX() - (getWidth()/2));
+    	}
+		
+	}
+	
+	public int getXOffset(){
+		return xOffset;
+	}
+	
+	public int getYOffset(){
+		return yOffset;
+	}
+	
+	public int getCenterX(){
+		return xOffset - (getWidth()/2);
+	}
+	
+	public int getCenterY(){
+		return yOffset - (getWidth()/2);
+	}
+	public void setXOffset(int x){
+		xOffset = -x;
+	}
+	
+	public void setYOffset(int y){
+		yOffset = -y;
+	}
+	
+	public int getWidth(){
+		return screenWidth;
+	}
+	
+	public int getHeight(){
+		return screenHeight;
+	}
+	
+	public void render(Graphics g){
+		g.translate(xOffset, yOffset);
+	}
+}

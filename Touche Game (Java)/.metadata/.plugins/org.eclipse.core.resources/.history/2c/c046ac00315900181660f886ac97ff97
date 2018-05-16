@@ -1,0 +1,200 @@
+package main.entities.mobs.playerClasses;
+
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import main.Timer;
+import main.entities.mobs.Mob;
+import main.entities.projectiles.Projectile;
+import main.graphics.Animation;
+import main.graphics.SpriteSheet;
+import main.level.Terrain;
+import main.level.tiles.EventTile;
+
+public abstract class Player extends Mob{
+	
+	Timer basicAttack;
+	boolean canFireBasicAttack = true;
+	
+	Timer takeDamage;
+	boolean canTakeDamage = true;
+	
+	public Player(int X, int Y, int W, int H, SpriteSheet spritesheet, Terrain t, int ticksBasicAttack) {
+		super(X, Y, W, H, 0, 0, 100, spritesheet, t);
+		currentAnimation = 0;
+		numOfAnimations = 4;
+		animations = new Animation[numOfAnimations];
+		basicAttack = new Timer(ticksBasicAttack, true);
+		takeDamage = new Timer(30, true);
+		hitbox = new Rectangle();
+		hitbox.setBounds((int)x, (int)y, width, height);
+		init();
+	}
+
+	public void render(Graphics g) {
+		animations[currentAnimation].render(g, (int)x, (int)y);
+	}
+
+	public void tick() {
+		
+		basicAttack.tick();
+		
+		if(basicAttack.timeOver()){
+			canFireBasicAttack = true;
+		}
+		
+		takeDamage.tick();
+		
+		if(takeDamage.timeOver()){
+			canTakeDamage = true;
+		}
+		
+		if(!(tileCollision((int)xvel, 0))){
+			x += xvel;
+		}
+		
+		if(!(tileCollision(0, (int)yvel))){
+			y += yvel;
+		}
+		
+		hitbox.setLocation((int)x, (int)y);
+		
+		animations[currentAnimation].animate();
+		
+		terrainCollision();
+		
+		checkHealth();
+	}
+	
+	public void subtractHP(int hp){
+		health -= hp;
+	}
+	
+	public void addHP(int hp){
+		health += hp;
+	}
+	
+	public void takeEnemyDamage(int d){
+		if(canTakeDamage){
+			health -= d;
+			canTakeDamage = false;
+			takeDamage.reset();
+		}
+	}
+	
+	public void loadAnimations() {
+		//Down
+		animations[0] = new Animation(10);
+		animations[0].addFrame(entitySpriteSheet.getSprite(16, 0, 15, 15, width, height));
+		animations[0].addFrame(entitySpriteSheet.getSprite(32, 0, 15, 15, width, height));
+		
+		//Up
+		animations[1] = new Animation(10);
+		animations[1].addFrame(entitySpriteSheet.getSprite(0, 0, 15, 15, width, height));
+		animations[1].addFrame(entitySpriteSheet.getSprite(48, 0, 15, 15, width, height));
+		
+		//Right
+		animations[2] = new Animation(10);
+		animations[2].addFrame(entitySpriteSheet.getSprite(64, 0, 15, 15, width, height));
+		animations[2].addFrame(entitySpriteSheet.getSprite(80, 0, 15, 15, width, height));
+		
+		//Left
+		animations[3] = new Animation(10);
+		animations[3].addFrame(entitySpriteSheet.getSprite(112, 0, 15, 15, width, height));
+		animations[3].addFrame(entitySpriteSheet.getSprite(96, 0, 15, 15, width, height));
+		
+		animations[0].play();
+		animations[1].play();
+		animations[2].play();
+		animations[3].play();
+	}
+	
+	public void load(){
+		loadAnimations();
+	}
+
+	public void death() {
+		isDead = true;
+	}
+
+	public void init() {
+		load();
+	}
+
+	public void move(int direction, int speed) {
+		if(direction == 0){
+			currentAnimation = 0;
+			yvel = speed;
+			animations[0].play();
+		}else if(direction == 1){
+			currentAnimation = 1;
+			yvel = -speed;
+			animations[1].play();
+		}else if(direction == 2){
+			currentAnimation = 2;
+			xvel = speed;
+			animations[2].play();
+		}else if(direction == 3){
+			currentAnimation = 3;
+			xvel = -speed;
+			animations[3].play();
+		}
+	}
+	
+	public EventTile getEventTileCollided(){
+		for(int x = 0; x < terrain.getWidth(); x++){
+			for(int y = 0; y < terrain.getHeight(); y++){
+				if(checkTerrainCollision((int)this.x, (int)this.y, width, height, terrTileMap[x][y], 50) && terrTileMap[x][y].isEventTile()){
+					return (EventTile)terrTileMap[x][y];
+				}
+			}
+		}
+		return null;
+	}
+	
+	public boolean eventTileCollided(){
+		for(int x = 0; x < terrain.getWidth(); x++){
+			for(int y = 0; y < terrain.getHeight(); y++){
+				if(checkTerrainCollision((int)this.x, (int)this.y, width, height, terrTileMap[x][y], 50) && terrTileMap[x][y].isEventTile()){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public void stopMovingX(){
+		xvel = 0;
+		animations[2].stop();
+		animations[3].stop();
+	}
+	
+	public void stopMovingY(){
+		yvel = 0;
+		animations[0].stop();
+		animations[1].stop();
+	}
+	
+	public void terrainCollision() {
+		if(x < 0){
+			x = 0;
+		}
+		
+		if(x > (terrain.getWidth() * terrain.getTileWidth()) - width){
+			x = (terrain.getWidth() * terrain.getTileWidth()) - width;
+		}
+		
+		if(y < 0){
+			y = 0;
+		}
+		
+		if(y > (terrain.getHeight() * terrain.getTileWidth()) - height){
+			y = (terrain.getHeight() * terrain.getTileWidth()) - height;
+		}
+	}
+	
+	public boolean CanFireBasicAttack(){
+		return canFireBasicAttack;
+	}
+	
+	public abstract Projectile attack(int mouseX, int mouseY);
+}

@@ -1,0 +1,40 @@
+package main.game_states;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+import main.graphics.SpriteSheet;
+import main.input.KeyInputDevice;
+import main.input.MouseInputDevice;
+
+public abstract class GameState {
+	
+	public static final int GAMEPLAY_STATE = 0;
+	
+	public static final int WIDTH = 1920, HEIGHT = 1080;
+	protected boolean renderLoad = false;
+	protected int switchState = -1;
+	
+	protected String playerType;
+	
+	public abstract void render(Graphics g);
+	public abstract void tick();
+	public abstract void init();
+	public abstract void input(KeyInputDevice[] keys, MouseInputDevice[] mousebuttons);
+	public abstract void reset(boolean fullReset);
+	
+	public void setPlayerType(String t){
+		playerType = t;
+	}
+	
+	public void renderLoading(Graphics g){
+		g.setColor(new Color(255, 0, 0));
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.drawImage(loading.getSprite(0, 0, 32, 14, 250, 250), 0, HEIGHT - 125, null);
+	}
+	
+	public int getSwitchState(){
+		return switchState;
+	}
+	
+}

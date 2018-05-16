@@ -1,0 +1,44 @@
+package main.game_states;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+import main.Timer;
+import main.graphics.SpriteSheet;
+import main.input.KeyInputDevice;
+import main.input.MouseInputDevice;
+
+public class Win_State extends GameState{
+
+	SpriteSheet win_Screen;
+	Timer winSwitch = new Timer(60, true);
+	boolean close = false;
+	
+	public void render(Graphics g) {
+		g.setColor(new Color(128, 0, 0));
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.drawImage(win_Screen.getSprite(0, 0, 127, 29, 1920, 1920), 0, 0, null);
+	}
+
+	public void tick() {
+		winSwitch.tick();
+		if(winSwitch.timeOver()){
+			close = true;
+		}
+	}
+
+	public void init() {
+		win_Screen = new SpriteSheet("res/Win Screen.png");
+	}
+
+	public void input(KeyInputDevice[] keys, MouseInputDevice[] mousebuttons) {
+		if(keys[7].getPressed() && close){
+			System.exit(-1);
+		}
+	}
+
+	public void reset(boolean fullReset) {
+		
+	}
+
+}

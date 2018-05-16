@@ -1,0 +1,29 @@
+package main.entities.mobs.playerClasses;
+
+import main.entities.projectiles.Fireball;
+import main.entities.projectiles.Projectile;
+import main.graphics.SpriteSheet;
+import main.level.Terrain;
+
+public class Mage extends Player{
+	
+	public Mage(int X, int Y, int W, int H, SpriteSheet spritesheet, Terrain t) {
+		super(X, Y, W, H, spritesheet, t, 30);
+	}
+
+	public Projectile attack(int mouseX, int mouseY) {
+		
+		double diffX = x - mouseX;
+		double diffY = y - mouseY;
+		
+		double diffMP = Math.sqrt((diffX*diffX) + (diffY*diffY));
+		double pXVEL = -(diffX/diffMP);
+		double pYVEL = -(diffY/diffMP);
+		
+		canFireBasicAttack = false;
+		basicAttack.reset();
+		
+		return new Fireball((int)(getCenterX() - 20), (int)(getCenterY() - 20), 40, 40, pXVEL, pYVEL, new SpriteSheet("res/SpriteSheets/Projectile_Spritesheet.png"), 45, 5, terrain);
+	}
+
+}

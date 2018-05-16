@@ -1,0 +1,107 @@
+package main.game_states;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+
+import main.Timer;
+import main.graphics.SpriteSheet;
+import main.input.KeyInputDevice;
+import main.input.MouseInputDevice;
+
+public class Menu_State extends GameState{
+
+	SpriteSheet logo;
+	SpriteSheet loading;
+	String[] menuOptions;
+	int optionSelected;
+	
+	boolean canSwitchMenuOption;
+	Timer menuSwitch = new Timer(10, true);
+	
+	public void render(Graphics g) {
+		
+		if(renderLoad){
+			
+			renderLoading(g);
+		
+		}else{
+			
+			g.setColor(new Color(128, 0, 0));
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+			g.drawImage(logo.getSprite(0, 0, 127, 29, 1920, 1920), 0, 0, null);
+		
+			g.setFont(new Font("Arial", Font.BOLD, 80));
+			for(int i = 0; i < menuOptions.length; i++){
+				if(i == optionSelected){
+					g.setColor(new Color(255, 128, 0));
+				}else{
+					g.setColor(new Color(255, 0, 0));
+				}
+				g.drawString(menuOptions[i], (WIDTH/2) - 200, (i*100)+600);
+			}
+		}
+		
+	}
+
+	public void tick() {
+		if(optionSelected >= menuOptions.length){
+			optionSelected = 0;
+		}else if(optionSelected < 0){
+			optionSelected = menuOptions.length - 1;
+		}
+		
+		menuSwitch.tick();
+		if(menuSwitch.timeOver()){
+			canSwitchMenuOption = true;
+		}
+	}
+
+	public void init() {
+		logo = new SpriteSheet("res/Logo.png");
+		optionSelected = 0;
+		menuOptions = new String[3];
+		menuOptions[0] = "New Game";
+		menuOptions[1] = "Credits";
+		menuOptions[2] = "Quit Game";
+		reset(true);
+	}
+
+	public void input(KeyInputDevice[] keys, MouseInputDevice[] mousebuttons) {
+		if(keys[0].getPressed() && canSwitchMenuOption){
+			optionSelected++;
+			canSwitchMenuOption = false;
+			menuSwitch.reset();
+		}else if(keys[1].getPressed() && canSwitchMenuOption){
+			optionSelected--;
+			canSwitchMenuOption = false;
+			menuSwitch.reset();
+		}
+		
+		if(renderLoad){
+			switchState = PLAYERCLASSSELECT_STATE;
+		}
+		
+		if(keys[6].getPressed() && optionSelected == 0){
+			renderLoad = true;
+		}
+		
+		if(keys[6].getPressed() && optionSelected == 1){
+			switchState = CREDITS_STATE;
+		}
+		
+		if(keys[6].getPressed() && optionSelected == 2){
+			System.exit(-1);
+		}
+		
+		if(keys[5].getPressed()){
+			System.exit(-1);
+		}
+	}
+	
+	public void reset(boolean fullReset) {
+		switchState = -1;
+		renderLoad = false;
+	}
+
+}

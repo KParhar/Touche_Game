@@ -1,0 +1,173 @@
+package main;
+
+import java.awt.BorderLayout;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.image.BufferStrategy;
+import javax.swing.JFrame;
+import main.game_states.GameStateManager;
+import main.input.KeyInputHandler;
+import main.input.MouseInputHandler;
+
+public class MainClass extends Canvas implements Runnable{
+
+	private static final long serialVersionUID = 1L;
+	
+	static Dimension screenSize = new Dimension(600, 600);
+	static int width = (int)screenSize.getWidth();
+	static int height = (int)screenSize.getHeight();
+	public static final int WIDTH = width, HEIGHT = height;
+    public static final String TITLE = "Touche";
+    public JFrame display;
+    public boolean running =  false;
+    public int tickCount;
+    public int timeCountSeconds;
+    public int timeCountMinutes;
+    
+    GameStateManager gsm = new GameStateManager();
+    
+    KeyInputHandler keyInput;
+    MouseInputHandler mouseInput;
+    
+    public MainClass(){
+       
+        setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        setMaximumSize(new Dimension(WIDTH, HEIGHT));
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+       
+        display = new JFrame(TITLE);
+       
+        display.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        display.setLayout(new BorderLayout());
+        display.add(this, BorderLayout.CENTER);
+        display.setUndecorated(true);
+        display.pack();
+        display.setResizable(true);
+        display.setLocationRelativeTo(null);
+        display.setVisible(true);
+        keyInput = new KeyInputHandler();
+    	mouseInput = new MouseInputHandler();
+    	this.addKeyListener(keyInput);
+    	this.addMouseListener(mouseInput);
+    }
+   
+    public void init(){
+    	gsm.initGameStates();
+    	gsm.init();
+    }
+   
+    public void tick(){
+    	
+    	gsm.tick();
+    	
+    	gsm.input(keyInput.getKeyInputs(), mouseInput.getMouseInput());
+    	
+        tickCount++;
+        
+    }
+    
+    public void draw(Graphics g){
+    	gsm.render(g);
+    }
+   
+    public void render(){
+       
+        BufferStrategy buffStrat = getBufferStrategy();
+        if(buffStrat == null){
+            createBufferStrategy(3);
+            return;
+        }
+       
+        Graphics g = buffStrat.getDrawGraphics();
+       
+        //Rendering Goes Here
+        //Background Code Start
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, getWidth(), getHeight());
+        //Background Code End
+        
+        draw(g);
+        
+        //Rendering Ends Here
+       
+        g.dispose();
+        buffStrat.show();
+       
+    }
+   
+    public synchronized void start() {
+        running = true;
+        new Thread(this).start();
+    }
+   
+    public synchronized void stop() {
+        running = false;
+    }
+    
+    public void run() {
+       
+    	init();
+    	
+        long lastTime = System.nanoTime();
+        double nsPerTick = 1000000000D/60D;
+       
+        int frames = 0;
+        int ticks = 0;
+       
+        long lastTimer = System.currentTimeMillis();
+        double delta = 0;
+       
+        while(running){
+        	
+            long now = System.nanoTime();
+            delta += (now - lastTime) / nsPerTick;
+            lastTime = now;
+           
+            //Set to false to limit fps at tps
+            boolean shouldRender = true;
+           
+            while(delta >= 1){
+               
+                ticks++;
+                tick();
+                delta -= 1;
+               
+                shouldRender = true;
+               
+            }
+           
+            try {
+                Thread.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+           
+            if(shouldRender){
+                frames++;
+                render();
+            }
+           
+            if(System.currentTimeMillis() - lastTimer >= 1000){
+               
+                lastTimer += 1000;
+                
+                timeCountSeconds++;
+                if(timeCountSeconds >= 60){
+                	timeCountMinutes++;
+                	timeCountSeconds = 0;
+                }
+                
+                System.out.println("Frames Per Second: " + frames + ", Ticks Per Second: " + ticks + ", Has Been Running For " + timeCountMinutes + " Minutes, " + timeCountSeconds + " Seconds");
+                frames = 0;
+                ticks = 0;
+               
+            }
+           
+        }
+       
+    }
+
+}

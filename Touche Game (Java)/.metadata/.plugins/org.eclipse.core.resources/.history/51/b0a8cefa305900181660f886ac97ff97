@@ -1,0 +1,48 @@
+package main.level.tiles;
+
+import java.awt.Graphics;
+import java.util.ArrayList;
+
+import main.entities.projectiles.Arrow;
+import main.entities.projectiles.Projectile;
+import main.graphics.SpriteSheet;
+import main.level.Terrain;
+
+public class ArrowTurretTile extends TurretTile{
+
+	int aW = 45, aH = 45;
+	
+	public ArrowTurretTile(int X, int Y, int W, int H, SpriteSheet ts, SpriteSheet ps, Terrain t) {
+		super(X, Y, W, H, 120, ts, ps, t);
+		tile = ts.getSprite(0, 64, 15, 15, 50, 50);
+	}
+
+	public void render(Graphics g) {
+		g.drawImage(tile, x, y, null);
+	}
+
+	public void tick() {
+		
+		attackTimer.tick();
+		
+		if(attackTimer.timeOver()){
+			canFire = true;
+		}
+	}
+
+	public ArrayList<Projectile> fireProjectiles() {
+		ArrayList<Projectile> p = new ArrayList<Projectile>();
+		
+		/*LEFT*/p.add(new Arrow(x - w, y + (h/2) - 20, aW, aH, -1, 0, projectileSpriteSheet, 15, 4, terr));
+		/*TOP*/p.add(new Arrow(x + (w/2) - 20, y - h, aW, aH, 0, -1, projectileSpriteSheet, 15, 4, terr));
+		/*RIGHT*/p.add(new Arrow(x + w, y + (h/2) - 20, aW, aH, 1, 0, projectileSpriteSheet, 15, 4, terr));
+		/*DOWN*/p.add(new Arrow(x + (w/2) - 20, y + h, aW, aH, 0, 1, projectileSpriteSheet, 15, 4, terr));
+		
+		canFire = false;
+		
+		attackTimer.reset();
+		
+		return p;
+	}
+
+}

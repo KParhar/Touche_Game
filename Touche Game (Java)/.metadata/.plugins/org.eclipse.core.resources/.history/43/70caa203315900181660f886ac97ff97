@@ -1,0 +1,13 @@
+package main.entities.mobs.npc;
+
+import main.entities.mobs.Mob;
+import main.graphics.SpriteSheet;
+import main.level.Terrain;
+
+public abstract class NPC extends Mob{
+
+	public NPC(int X, int Y, int W, int H, int xvel, int yvel, int hp, SpriteSheet spritesheet, Terrain t) {
+		super(X, Y, W, H, xvel, yvel, hp, spritesheet, t);
+	}
+
+}

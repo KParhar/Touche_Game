@@ -1,0 +1,62 @@
+package main.graphics;
+
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+public class Animation {
+
+	int currentFrame;
+	int ticksPerFrame;
+	int currentTick;
+	int addTicks;
+	boolean playAnimation;
+	ArrayList<BufferedImage> frames = new ArrayList<BufferedImage>();
+	
+	public Animation(int tpf){
+		ticksPerFrame = tpf;
+		addTicks = ticksPerFrame;
+		currentTick = 0;
+		currentFrame = 0;
+		playAnimation = false;
+	}
+	
+	public void addFrame(BufferedImage frame){
+		frames.add(frame);
+	}
+	
+	public void render(Graphics g, int x, int y){
+		g.drawImage(frames.get(currentFrame), x, y, null);
+	}
+	
+	public BufferedImage getCurrentFrame(){
+		return frames.get(currentFrame);
+	}
+	
+	public void stop(){
+		playAnimation = false;
+	}
+	
+	public void play(){
+		playAnimation = true;
+	}
+	
+	public void animate(){
+		if(playAnimation){
+			if(currentTick < ticksPerFrame){
+				currentTick++;
+			}
+			else if(currentTick >= ticksPerFrame){
+				
+				currentTick = 0;
+				
+				
+				if(currentFrame < frames.size() - 1){
+					currentFrame++;
+				}else if(currentFrame >= frames.size() - 1){
+					currentFrame = 0;
+				}
+			}
+		}
+	}
+}

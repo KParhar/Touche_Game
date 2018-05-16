@@ -1,0 +1,51 @@
+package main.entities.projectiles;
+
+import java.awt.Graphics;
+import java.awt.Rectangle;
+
+import main.graphics.SpriteSheet;
+import main.level.Terrain;
+
+public class Arrow extends Projectile{
+
+	public Arrow(int X, int Y, int W, int H, double xVEL, double yVEL, SpriteSheet spritesheet, int damageDealt,
+			int movespeed, Terrain t) {
+		super(X, Y, W, H, xVEL, yVEL, spritesheet, damageDealt, movespeed, t);
+		hitbox = new Rectangle();
+		hitbox.setBounds((int)x + W/4, (int)y, W/2, H);
+	}
+
+	public void render(Graphics g) {
+		
+		if(Math.abs(xvel) > Math.abs(yvel)){
+			hitbox.setBounds((int)x, (int)y + height/4, width, height/2);
+			if(xvel > 0){
+				g.drawImage(entitySpriteSheet.getSprite(16, 8, 15, 7, width, height), (int)x, (int)y, null);
+			}else{
+				g.drawImage(entitySpriteSheet.getSprite(16, 0, 15, 7, width, height), (int)x, (int)y, null);
+			}
+		}else if(Math.abs(xvel) < Math.abs(yvel)){
+			if(yvel > 0){
+				g.drawImage(entitySpriteSheet.getSprite(8, 0, 7, 15, width, height), (int)x, (int)y, null);
+			}else{
+				g.drawImage(entitySpriteSheet.getSprite(0, 0, 7, 15, width, height), (int)x, (int)y, null);
+			}
+		}else{
+			if(xvel > 0){
+				g.drawImage(entitySpriteSheet.getSprite(8, 0, 7, 15, width, height), (int)x, (int)y, null);
+			}else{
+				g.drawImage(entitySpriteSheet.getSprite(0, 0, 7, 15, width, height), (int)x, (int)y, null);
+			}
+		}
+	}
+
+	public void tick() {
+		x += xvel * speed;
+		y += yvel * speed;
+		
+		hitbox.setLocation((int)x, (int)y);
+		
+		remove = tileCollision((int)xvel, (int)yvel)  || terrCollision();
+	}
+
+}

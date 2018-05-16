@@ -1,0 +1,38 @@
+package main.entities.mobs.enemies;
+
+import main.entities.mobs.Mob;
+import main.entities.mobs.playerClasses.Player;
+import main.graphics.SpriteSheet;
+import main.level.Terrain;
+
+public abstract class Enemy extends Mob {
+
+	int damage;
+	boolean touchDamage;
+	Player player;
+	
+	boolean deadSwitch;
+	
+	public Enemy(int X, int Y, int W, int H, int xvel, int yvel, int d, int hp, boolean td, SpriteSheet spritesheet, Terrain t, Player p) {
+		super(X, Y, W, H, xvel, yvel, hp, spritesheet, t);
+		damage = d;
+		touchDamage = td;
+		player = p;
+	}
+	
+	public boolean getDeadSwitch(){
+		return deadSwitch;
+	}
+	
+	public void setDeadSwitch(boolean ds){
+		deadSwitch = ds;
+	}
+	
+	public int getDamage(){
+		return damage;
+	}
+	
+	public boolean isTouchDamage(){
+		return touchDamage;
+	}
+}

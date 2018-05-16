@@ -1,0 +1,102 @@
+package main.entities.mobs;
+
+import main.entities.Entity;
+import main.graphics.Animation;
+import main.graphics.SpriteSheet;
+import main.level.Terrain;
+import main.level.tiles.Tile;
+
+public abstract class Mob extends Entity{
+
+	protected int health;
+	protected int currentAnimation;
+	protected int numOfAnimations;
+	protected Animation[] animations;
+	protected Terrain terrain;
+	protected boolean isDead = false;
+	protected Tile[][] terrTileMap;
+	
+	public Mob(int X, int Y, int W, int H, int xvel, int yvel, int hp, SpriteSheet spritesheet, Terrain t) {
+		super(X, Y, W, H, xvel, yvel, spritesheet);
+		terrain = t;
+		terrTileMap = terrain.getTileMap();
+		health = hp;
+	}
+	
+	public void checkHealth(){
+		if(health <= 0){
+			death();
+		}
+	}
+	
+	public boolean checkTerrainCollision(int x, int y, int w, int h, Tile t, int TileWidth){
+		if(y + h > t.getY() && y < t.getY() + TileWidth && x + w > t.getX() && x < t.getX() + TileWidth){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public boolean TerrainCollision(int px, int py, int pw, int ph, int xVEL, int yVEL, Terrain t){
+		Tile[][] tiles = t.getTileMap();
+		
+		int fX = px + xVEL;
+		int fY = py + yVEL;
+				
+		int tfX = Math.floorDiv(fX, t.getTileWidth());
+		int tfY = Math.floorDiv(fY, t.getTileWidth());
+				
+		if(tiles[tfX][tfY].checkCollidable()){
+			return false;
+		}else{ return true; }
+		
+	}
+	
+	public int getHealth(){
+		return health;
+	}
+	
+	public void setHealth(int hp){
+		health = hp;
+	}
+	
+	public void subtractHealth(int hp){
+		health -= hp;
+	}
+	
+	public void setTerrain(Terrain t){
+		terrain = t;
+	}
+	
+	public boolean isDead(){
+		return isDead;
+	}
+	
+	public void setDeath(boolean d){
+		isDead = d;
+	}
+	
+	public boolean tileCollision(int xVEL, int yVEL){
+		
+		boolean collided = false;
+		
+		for (int corner = 0; corner < 4; corner++){
+			int nX = (int) ((x + xVEL) + corner % 2 * width - 1);
+			int nY = (int) ((y + yVEL) + corner / 2 * height - 1);
+			
+			if(terrain.getPosTile(nX, nY).checkCollidable()){
+				collided = true;
+			}
+		}
+		
+		return collided;
+	}
+	
+	public abstract void death();
+	public abstract void move(int direction, int speed);
+	public abstract void stopMovingX();
+	public abstract void stopMovingY();
+	public abstract void loadAnimations();
+	public abstract void init();
+	public abstract void load();
+}

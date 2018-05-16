@@ -1,0 +1,53 @@
+package main.game_states;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+
+import main.Timer;
+import main.input.KeyInputDevice;
+import main.input.MouseInputDevice;
+
+public class Credit_State extends GameState{
+
+	Timer menuSwitch = new Timer(60, true);
+	boolean closeCredits = false;
+	
+	public void render(Graphics g) {
+		g.setColor(new Color(128, 0, 0));
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.setColor(new Color(255, 0, 0));
+		g.setFont(new Font("Arial", Font.BOLD, 80));
+		g.drawString("Programmed By Kush Parhar", 10, 100);
+		g.drawString("Images By Ling Dong", 10, 200);
+		g.drawString("Moral Support From Abir Shahid", 10, 300);
+		g.drawString("Kington Character Based On Quinton Tracy", 10, 400);
+	}
+
+	public void tick() {
+		menuSwitch.tick();
+		if(menuSwitch.timeOver()){
+			closeCredits = true;
+		}
+	}
+
+	public void init() {
+		reset(true);
+	}
+
+	public void input(KeyInputDevice[] keys, MouseInputDevice[] mousebuttons) {
+		if(keys[7].getPressed() && closeCredits){
+			switchState = MENU_STATE;
+		}
+	}
+
+	public void reset(boolean fullReset) {
+		switchState = -1;
+		closeCredits = false;
+		renderLoad = false;
+		menuSwitch.reset();
+	}
+	
+	
+
+}

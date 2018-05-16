@@ -1,0 +1,29 @@
+package main.entities.projectiles;
+
+import java.awt.Graphics;
+import java.awt.Rectangle;
+
+import main.graphics.SpriteSheet;
+import main.level.Terrain;
+
+public class Fireball extends Projectile{
+
+	public Fireball(int X, int Y, int W, int H, double xVEL, double yVEL, SpriteSheet spritesheet, int damageDealt, int ms, Terrain terrain) {
+		super(X, Y, W, H, xVEL, yVEL, spritesheet, damageDealt, ms, terrain);
+		hitbox = new Rectangle((int)x, (int)y, width, height);
+	}
+	
+	public void render(Graphics g) {
+		g.drawImage(entitySpriteSheet.getSprite(0, 16, 15, 15, width, height), (int)x, (int)y, null);
+	}
+
+	public void tick() {
+		x += xvel * speed;
+		y += yvel * speed;
+		
+		hitbox.setLocation((int)x, (int)y);
+		
+		remove = tileCollision((int)xvel, (int)yvel) || terrCollision();
+	}
+
+}

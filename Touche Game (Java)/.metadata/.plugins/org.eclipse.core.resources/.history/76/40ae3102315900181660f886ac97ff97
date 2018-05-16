@@ -1,0 +1,74 @@
+package main.entities.projectiles;
+
+import java.awt.Graphics;
+
+import main.entities.Entity;
+import main.graphics.SpriteSheet;
+import main.level.Terrain;
+
+public abstract class Projectile extends Entity{
+	
+	int damage;
+	int speed;
+	boolean remove = false;
+	Terrain terr;
+	
+	public Projectile(int X, int Y, int W, int H, double xVEL, double yVEL, SpriteSheet spritesheet, int damageDealt, int movespeed, Terrain t) {
+		super(X, Y, W, H, xVEL, yVEL, spritesheet);
+		damage = damageDealt;
+		speed = movespeed;
+		terr = t;
+	}
+	
+	public boolean terrCollision(){
+		if(getX() < 0){
+			return true;
+		}
+		
+		if(getY() < 0){
+			return true;
+		}
+		
+		if(getX() > terr.getWidth() * terr.getTileWidth()){
+			return true;
+		}
+		
+		if(getY() > terr.getHeight() * terr.getTileWidth()){
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean tileCollision(int xVEL, int yVEL){
+		
+		boolean collided = false;
+		
+		for (int corner = 0; corner < 4; corner++){
+			int nX = (int) ((x + xVEL) + corner % 2 * width - 1);
+			int nY = (int) ((y + yVEL) + corner / 2 * height - 1);
+			
+			if(terr.getPosTile(nX, nY).checkCollidable()){
+				collided = true;
+			}
+		}
+		
+		return collided;
+	}
+	
+	public boolean remove(){
+		return remove;
+	}
+	
+	public void setRemove(boolean r){
+		remove = r;
+	}
+	
+	public int getDamage(){
+		return damage;
+	}
+	
+	public abstract void render(Graphics g);
+	public abstract void tick();
+	
+}

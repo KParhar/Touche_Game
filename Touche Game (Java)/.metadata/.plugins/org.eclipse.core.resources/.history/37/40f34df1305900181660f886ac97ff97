@@ -1,0 +1,37 @@
+package main.graphics.HUD;
+
+import java.awt.Graphics;
+
+import main.entities.mobs.playerClasses.Player;
+import main.graphics.SpriteSheet;
+
+public class HealthHUD {
+	
+	SpriteSheet spriteSheet;
+	
+	public HealthHUD(SpriteSheet s){
+		
+		spriteSheet = s;
+		
+	}
+	
+	public void RenderHUD(Graphics g, int x, int y, Player p){
+		renderHearts(p.getHealth(), g, x, y);
+	}
+	
+	public void renderHearts(int HP, Graphics g, int x, int y){
+		boolean flippedHeart = false;
+		int xPos = x;
+		for(int h = 0; h < HP; h += 5){
+			if(!flippedHeart){
+				g.drawImage(spriteSheet.getSprite(0, 0, 7, 7, 40, 40), xPos, y, null);
+				xPos += 40;
+				flippedHeart = true;
+			}else{
+				g.drawImage(spriteSheet.getSprite(8, 0, 7, 7, 40, 40), xPos, y, null);
+				xPos += 10;
+				flippedHeart = false;
+			}
+		}
+	}
+}

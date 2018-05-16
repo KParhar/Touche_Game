@@ -1,0 +1,172 @@
+package main.game_states;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.util.ArrayList;
+import main.entities.mobs.npc.Kington;
+import main.entities.mobs.playerClasses.Archer;
+import main.entities.mobs.playerClasses.Mage;
+import main.entities.mobs.playerClasses.Player;
+import main.entities.projectiles.Projectile;
+import main.graphics.Camera;
+import main.graphics.SpriteSheet;
+import main.graphics.HUD.HealthHUD;
+import main.input.KeyInputDevice;
+import main.input.MouseInputDevice;
+import main.level.Terrain;
+
+public class Gameplay_State extends GameState{
+	
+	 
+	
+	public void render(Graphics g) {
+		if(renderLoad){
+			renderLoading(g);
+		}else{
+			camera.render(g);
+			//Render Level
+			level.render(g, -camera.getXOffset(), -camera.getYOffset());
+			player.render(g);
+			for(int i = 0; i < playerProjectiles.size(); i++){
+				playerProjectiles.get(i).render(g);
+			}
+			kington.render(g);
+			g.setColor(new Color(255, 255, 255));
+			g.setFont(new Font("Arial", Font.BOLD, 50));
+			g.drawString("Beat all the dungeons!", 700, 350);
+			g.drawString("Save the kingdom!", 750, 450);
+			healthHUD.RenderHUD(g, -camera.getXOffset() - 10, -camera.getYOffset() + 10, player);
+		}
+	}
+	
+	public String getPlayerType(){
+		if(player.getClass().getName().equals("main.entities.mobs.playerClasses.Mage")){
+			return "Mage";
+		}
+		
+		return "null";
+	}
+
+	public void tick() {
+		level.tick();
+    	
+        player.tick();
+        
+        for(int i = 0; i < playerProjectiles.size(); i++){
+        	playerProjectiles.get(i).tick();
+        	
+        	if(playerProjectiles.get(i).remove()){
+        		playerProjectiles.remove(i);
+        	}
+        }
+        
+        if(player.isDead()){
+        	switchState = 5;
+        }
+        
+        checkLevelChange();
+        
+        camera.cameraTerrainDetection(level, player);
+        
+	}
+	
+	public void checkLevelChange(){
+    	if(player.eventTileCollided()){
+    		if(renderLoad){
+    			
+    			if(player.getEventTileCollided().getEvent() == GameState.DUNGEON1_STATE && !dungeonsFinished[0]){
+    				switchState = player.getEventTileCollided().getEvent();
+    				dungeonsFinished[0] = true;
+    			}
+    			if(player.getEventTileCollided().getEvent() == GameState.DUNGEON2_STATE && !dungeonsFinished[1]){
+    				switchState = player.getEventTileCollided().getEvent();
+    				dungeonsFinished[1] = true;
+    			}
+    			if(player.getEventTileCollided().getEvent() == GameState.DUNGEON3_STATE && !dungeonsFinished[2]){
+    				switchState = player.getEventTileCollided().getEvent();
+    				dungeonsFinished[2] = true;
+    			}
+    			
+    		}
+    		
+    		if(player.getEventTileCollided().getEvent() == GameState.DUNGEON1_STATE && !dungeonsFinished[0]){
+    			renderLoad = true;
+    		}
+    		
+    		if(player.getEventTileCollided().getEvent() == GameState.DUNGEON2_STATE && !dungeonsFinished[1]){
+    			renderLoad = true;
+    		}
+    		
+    		if(player.getEventTileCollided().getEvent() == GameState.DUNGEON3_STATE && !dungeonsFinished[2]){
+    			renderLoad = true;
+    		}
+    	}
+    	
+    	if(timesReturned == 3){
+    		switchState = GameState.WIN_STATE;
+    	}
+    }
+
+	public void init() {
+
+    	level = new Terrain(128, 128, 50, "res/Levels/OverWorld.png", new SpriteSheet("res/SpriteSheets/Terrain_Spritesheet.png"), new SpriteSheet("res/SpriteSheets/Projectile_Spritesheet.png"));
+    	
+    	if(playerType.equals("Mage")){
+    		player = new Mage(19*50, 12*50, 48, 48, new SpriteSheet("res/SpriteSheets/Player_Spritesheet.png"), level);
+		}
+    	
+    	if(playerType.equals("Archer")){
+    		player = new Archer(19*50, 12*50, 48, 48, new SpriteSheet("res/SpriteSheets/Player_Spritesheet.png"), level);
+		}
+    	
+    	healthHUD = new HealthHUD(new SpriteSheet("res/SpriteSheets/HUD_Effects_Spritesheet.png"));
+    	camera = new Camera(0, 0, WIDTH, HEIGHT);
+    	
+    	kington = new Kington(950, 200, 50, 50, level);
+    	
+    	reset(true);
+	
+	}
+
+	public void input(KeyInputDevice[] keys, MouseInputDevice[] mousebuttons){
+    	
+    	if(keys[2].getPressed()){
+    		player.move(2, 3);
+    	}else if(keys[3].getPressed()){
+    		player.move(3, 3);
+    	}else{
+    		player.stopMovingX();
+    	}
+    	
+    	if(keys[0].getPressed()){
+    		player.move(0, 3);
+    	}else if(keys[1].getPressed()){
+    		player.move(1, 3);
+    	}else{
+    		player.stopMovingY();
+    	}
+    	
+    	if(keys[5].getPressed()){
+    		System.exit(-1);
+    	}
+	}
+	
+	public void reset(boolean fullReset) {
+		switchState = -1;
+		renderLoad = false;
+		player.setDeath(false);
+		player.setHealth(100);
+		player.setX(19*50);
+		player.setY(12*50);
+		camera.setCameraPos(0, 0);
+		timesReturned++;
+		if(fullReset){
+			timesReturned = 0;
+			dungeonsFinished[0] = false;
+			dungeonsFinished[1] = false;
+			dungeonsFinished[2] = false;
+		}
+	}
+
+}
