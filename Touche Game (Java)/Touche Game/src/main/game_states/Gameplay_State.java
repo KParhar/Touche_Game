@@ -1,20 +1,22 @@
 package main.game_states;
 
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.ArrayList;
+
+import main.game_parts.GameBoard;
 import main.input.KeyInputDevice;
 import main.input.MouseInputDevice;
 
 public class Gameplay_State extends GameState{
 	
+	GameBoard gb;
+	
 	public void init() {
-		
+		gb = new GameBoard(new Dimension(600, 600));
 	}
 	
 	public void render(Graphics g) {
-		
+		gb.render(g);
 	}
 	
 	public void tick() {

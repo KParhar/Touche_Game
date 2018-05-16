@@ -1,0 +1,7 @@
+package main.game_parts;
+
+public class GameBoard {
+	
+	int gridSize = 7;
+	
+}

@@ -1,0 +1,14 @@
+package main.game_parts;
+
+public class Pawn {
+	
+	int gridX, gridY;
+	boolean isRound;
+	
+	public Pawn(int x, int y, boolean r) {
+		gridX = x;
+		gridY = y;
+		isRound = r;
+	}
+	
+}

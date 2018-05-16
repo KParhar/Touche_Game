@@ -1,0 +1,27 @@
+package main.game_states;
+
+import java.awt.Graphics;
+import main.input.KeyInputDevice;
+import main.input.MouseInputDevice;
+
+public class Gameplay_State extends GameState{
+	
+	public void init() {
+		
+	}
+	
+	public void render(Graphics g) {
+		
+	}
+	
+	public void tick() {
+        
+	}
+	
+	public void input(KeyInputDevice[] keys, MouseInputDevice[] mousebuttons){   	
+    	if(keys[5].getPressed()){
+    		System.exit(-1);
+    	}
+	}
+
+}

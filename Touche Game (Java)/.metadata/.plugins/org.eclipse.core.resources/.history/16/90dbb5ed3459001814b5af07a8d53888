@@ -1,0 +1,5 @@
+package main.game_parts;
+
+public class Pawn {
+
+}

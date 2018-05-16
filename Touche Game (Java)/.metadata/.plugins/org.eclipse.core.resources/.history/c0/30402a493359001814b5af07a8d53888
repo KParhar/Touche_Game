@@ -1,0 +1,15 @@
+package main.game_parts;
+
+import java.awt.Dimension;
+
+public class GameBoard {
+	
+	public final static int WIDTH = 7;
+	public final static int HEIGHT = 7;
+	public static int GRID_SIZE;
+	
+	public GameBoard(Dimension displaySize) {
+		
+	}
+	
+}

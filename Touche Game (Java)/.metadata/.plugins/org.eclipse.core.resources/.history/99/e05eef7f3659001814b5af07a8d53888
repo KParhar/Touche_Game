@@ -1,0 +1,28 @@
+package main.game_parts;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+
+public class Pawn {
+	
+	int gridX, gridY;
+	int gridSize;
+	boolean isRound;
+	
+	public Pawn(int x, int y, int gS, boolean r) {
+		gridX = x;
+		gridY = y;
+		isRound = r;
+		gridSize = gS;
+	}
+	
+	public void render(Graphics g) {
+		((Graphics2D)g)
+		if(isRound) {
+			g.fillOval(gridX * gridSize, gridY * gridSize, gridSize, gridSize);
+		} else {
+			g.fillRect(gridX * gridSize, gridY * gridSize, gridSize, gridSize);
+		}
+	}
+	
+}

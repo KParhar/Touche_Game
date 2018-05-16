@@ -16,6 +16,7 @@ public class GameStateManager {
 	public void initGameStates(){
 		gameStates = new ArrayList<GameState>();
 		gameStates.add(new Gameplay_State());
+		setState(0);
 	}
 	
 	public void setState(int state){
