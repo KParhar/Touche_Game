@@ -19,7 +19,7 @@ public class Pawn {
 		gridY = y;
 		isRound = r;
 		gridSize = gS;
-		isRed = !isRound;
+		isRed = isRound;
 	}
 	
 	public void render(Graphics g) {
@@ -35,10 +35,6 @@ public class Pawn {
 			g.fillOval((gridX * gridSize) + (3 * pawnBorder), (gridY * gridSize) + (3 * pawnBorder), gridSize-(6*pawnBorder), gridSize-(6*pawnBorder));
 		}
 		g.setColor(new Color(0, 0, 0));
-	}
-	
-	public void flip() {
-		isRed = !isRed;
 	}
 	
 }

@@ -37,8 +37,4 @@ public class Pawn {
 		g.setColor(new Color(0, 0, 0));
 	}
 	
-	public void flip() {
-		isRed = !isRed;
-	}
-	
 }

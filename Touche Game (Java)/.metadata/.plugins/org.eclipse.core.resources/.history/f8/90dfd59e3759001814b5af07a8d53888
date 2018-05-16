@@ -1,7 +1,6 @@
 package main.game_parts;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -34,11 +33,6 @@ public class Pawn {
 		if(isRed) {
 			g.fillOval((gridX * gridSize) + (3 * pawnBorder), (gridY * gridSize) + (3 * pawnBorder), gridSize-(6*pawnBorder), gridSize-(6*pawnBorder));
 		}
-		g.setColor(new Color(0, 0, 0));
-	}
-	
-	public void flip() {
-		isRed = !isRed;
 	}
 	
 }

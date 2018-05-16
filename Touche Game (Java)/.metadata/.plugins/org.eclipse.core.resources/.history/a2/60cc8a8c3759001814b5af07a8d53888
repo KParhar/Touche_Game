@@ -1,7 +1,6 @@
 package main.game_parts;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -30,15 +29,9 @@ public class Pawn {
 			g.drawRect((gridX * gridSize) + pawnBorder, (gridY * gridSize) + pawnBorder, gridSize-(2*pawnBorder), gridSize-(2*pawnBorder));
 		}
 		
-		g.setColor(new Color(255, 0, 0));
 		if(isRed) {
-			g.fillOval((gridX * gridSize) + (3 * pawnBorder), (gridY * gridSize) + (3 * pawnBorder), gridSize-(6*pawnBorder), gridSize-(6*pawnBorder));
+			g.drawOval((gridX * gridSize) + (2 * pawnBorder), (gridY * gridSize) + (2 * pawnBorder), gridSize-(4*pawnBorder), gridSize-(4*pawnBorder));
 		}
-		g.setColor(new Color(0, 0, 0));
-	}
-	
-	public void flip() {
-		isRed = !isRed;
 	}
 	
 }
