@@ -4,8 +4,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.util.ArrayList;
 
 public class Pawn {
 	
@@ -17,8 +15,6 @@ public class Pawn {
 	boolean isRed;
 	
 	int turnCount;
-	
-	ArrayList<Point> moves;
 	
 	public Pawn(int x, int y, int gS, boolean r) {
 		gridX = x;
@@ -44,14 +40,19 @@ public class Pawn {
 		g.setColor(new Color(0, 0, 0));
 	}
 	
-	public void calculateMoves(GameBoard b) {
-		
-	}
-	
-	public void renderMoves(Graphics g) {
-		g.setColor(new Color(0x00, 0xFF, 0x00, 0xFF/4));
-		for(int i = 0; i < moves.size(); i++) {
-			g.fillRect((int)moves.get(i).getX() * gridSize, (int)moves.get(i).getY() * gridSize, gridSize, gridSize);
+	public void renderMoves(Graphics g, GameBoard b) {
+		if(turnCount == 0) {
+			if(isRound) {
+				g.setColor(new Color(0x00, 0xFF, 0x00, 0xFF/4));
+				g.fillRect((gridX-1) * gridSize, (gridY-1) * gridSize, gridSize, gridSize);
+				g.fillRect((gridX-1) * gridSize, (gridY) * gridSize, gridSize, gridSize);
+				g.fillRect((gridX-1) * gridSize, (gridY+1) * gridSize, gridSize, gridSize);
+			} else {
+				g.setColor(new Color(0x00, 0xFF, 0x00, 0xFF/4));
+				g.fillRect((gridX+1) * gridSize, (gridY-1) * gridSize, gridSize, gridSize);
+				g.fillRect((gridX+1) * gridSize, (gridY) * gridSize, gridSize, gridSize);
+				g.fillRect((gridX+1) * gridSize, (gridY+1) * gridSize, gridSize, gridSize);
+			}
 		}
 		g.setColor(new Color(0, 0, 0));
 	}

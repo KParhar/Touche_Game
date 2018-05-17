@@ -51,7 +51,7 @@ public class Pawn {
 	public void renderMoves(Graphics g) {
 		g.setColor(new Color(0x00, 0xFF, 0x00, 0xFF/4));
 		for(int i = 0; i < moves.size(); i++) {
-			g.fillRect((int)moves.get(i).getX() * gridSize, (int)moves.get(i).getY() * gridSize, gridSize, gridSize);
+			g.fillRect(moves.get(i).getX() * gridSize, moves.get(i).getY() * gridSize, gridSize, gridSize);
 		}
 		g.setColor(new Color(0, 0, 0));
 	}
