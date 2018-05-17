@@ -10,8 +10,6 @@ public class GameStateManager {
 	
 	int currentState;
 	ArrayList<GameState> gameStates;
-	boolean[] hasInit;
-	String playerType = "Mage";
 	
 	public void initGameStates(){
 		gameStates = new ArrayList<GameState>();

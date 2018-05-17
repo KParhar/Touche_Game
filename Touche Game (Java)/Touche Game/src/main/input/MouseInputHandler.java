@@ -22,29 +22,27 @@ public class MouseInputHandler implements MouseListener{
 	
 	public void mousePressed(MouseEvent e) {
 		setMouseButtonPressed(e.getButton(), true);
-		//System.out.println(e.);
-		System.out.println(e.getY());
 		mouseInputs[0].setX(e.getX());
+		mouseInputs[0].setY(e.getY());
+		mouseInputs[1].setX(e.getX());
 		mouseInputs[1].setY(e.getY());
 	}
 	
 	public void mouseReleased(MouseEvent e) {
 		setMouseButtonPressed(e.getButton(), false);
 		mouseInputs[0].setX(e.getX());
+		mouseInputs[0].setY(e.getY());
+		mouseInputs[1].setX(e.getX());
 		mouseInputs[1].setY(e.getY());
 	}
 	
 	public void setMouseButtonPressed(int mouseButton, boolean pressed){
 		if(mouseButton == MouseEvent.BUTTON1){
 			mouseInputs[0].setPressed(pressed);
-			//mouseInputs[0].setX(e.getX());
-			//mouseInputs[0].setY(e.getY());
 		}
 		
 		if(mouseButton == MouseEvent.BUTTON3){
 			mouseInputs[1].setPressed(pressed);
-			//mouseInputs[1].setX(e.getX());
-			//mouseInputs[1].setY(e.getY());
 		}
 	}
 

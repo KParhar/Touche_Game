@@ -24,7 +24,9 @@ public class Gameplay_State extends GameState{
 	}
 	
 	public void input(KeyInputDevice[] keys, MouseInputDevice[] mousebuttons){   	
-    	if(keys[5].getPressed()){
+    	gb.input(mousebuttons);
+		
+		if(keys[5].getPressed()){
     		System.exit(-1);
     	}
 	}

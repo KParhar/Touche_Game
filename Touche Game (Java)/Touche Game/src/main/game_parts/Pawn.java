@@ -37,6 +37,33 @@ public class Pawn {
 		g.setColor(new Color(0, 0, 0));
 	}
 	
+	public void renderMoves(Graphics g) {
+		
+	}
+	
+	public void move(int x, int y) {
+		gridX = x;
+		gridY = y;
+	}
+	
+	public boolean checkMouseInput(int x, int y) {
+		int cGridX = x / gridSize;
+		int cGridY = y / gridSize;
+		
+		if(cGridX == gridX && cGridY == gridY) {
+			return true;
+		}
+		return false;
+	}
+	
+	public int getGridX() {
+		return gridX;
+	}
+	
+	public int getGridY() {
+		return gridY;
+	}
+	
 	public void flip() {
 		isRed = !isRed;
 	}
