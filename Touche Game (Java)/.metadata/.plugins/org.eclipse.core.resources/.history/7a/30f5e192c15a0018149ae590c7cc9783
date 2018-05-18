@@ -94,7 +94,7 @@ public class Pawn {
 							}
 						}
 					} else {
-						moves.remove(i);
+						
 					}
 				}
 			}

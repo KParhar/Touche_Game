@@ -93,8 +93,6 @@ public class Pawn {
 								moves.add(new Point(gridX + deltaX * 2 - 1,  gridY + deltaY * 2));
 							}
 						}
-					} else {
-						moves.remove(i);
 					}
 				}
 			}

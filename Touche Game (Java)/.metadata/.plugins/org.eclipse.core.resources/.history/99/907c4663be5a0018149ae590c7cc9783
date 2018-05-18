@@ -75,26 +75,23 @@ public class Pawn {
 				if(b.pawns.get(p).getGridX() == moves.get(i).x && b.pawns.get(p).getGridY() == moves.get(i).y) {
 					int deltaX = moves.get(i).x - gridX;
 					int deltaY = moves.get(i).y - gridY;
-					if(Math.abs(deltaX) <= 1 && Math.abs(deltaY) <= 1) {
-						moves.get(i).setLocation(gridX + deltaX * 2,  gridY + deltaY * 2);
-						if(turnCount > 0) {
-							if(Math.abs(deltaX) > 0 && Math.abs(deltaY) == 0) {
-								moves.add(new Point(gridX + deltaX * 2,  gridY + deltaY * 2 + 1));
-								moves.add(new Point(gridX + deltaX * 2,  gridY + deltaY * 2 - 1));
-							}
-							
-							if(Math.abs(deltaX) > 0 && Math.abs(deltaY) > 0) {
-								moves.add(new Point(gridX + deltaX * 2,  gridY + deltaY * 2 - (1*deltaY)));
-								moves.add(new Point(gridX + deltaX * 2 - (1*deltaX),  gridY + deltaY * 2));
-							}
-							
-							if(Math.abs(deltaX) == 0 && Math.abs(deltaY) > 0) {
-								moves.add(new Point(gridX + deltaX * 2 + 1,  gridY + deltaY * 2));
-								moves.add(new Point(gridX + deltaX * 2 - 1,  gridY + deltaY * 2));
-							}
+					moves.get(i).setLocation(gridX + deltaX * 2,  gridY + deltaY * 2);
+					
+					if(turnCount > 0) {
+						if(Math.abs(deltaX) > 0 && Math.abs(deltaY) == 0) {
+							moves.add(new Point(gridX + deltaX * 2,  gridY + deltaY * 2 + 1));
+							moves.add(new Point(gridX + deltaX * 2,  gridY + deltaY * 2 - 1));
 						}
-					} else {
-						moves.remove(i);
+						
+						if(Math.abs(deltaX) > 0 && Math.abs(deltaY) > 0) {
+							moves.add(new Point(gridX + deltaX * 2,  gridY + deltaY * 2 - (1*deltaY)));
+							moves.add(new Point(gridX + deltaX * 2 - (1*deltaX),  gridY + deltaY * 2));
+						}
+						
+						if(Math.abs(deltaX) == 0 && Math.abs(deltaY) > 0) {
+							moves.add(new Point(gridX + deltaX * 2 + 1,  gridY + deltaY * 2));
+							moves.add(new Point(gridX + deltaX * 2 - 1,  gridY + deltaY * 2));
+						}
 					}
 				}
 			}
@@ -102,6 +99,10 @@ public class Pawn {
 		
 		//Removing invalid moves
 		for(int i = moves.size()-1; i >= 0; i--) {
+			boolean invalidFirstMove = false;
+			if(turnCount == 0) {
+				
+			}
 			
 			boolean outOfBounds = (moves.get(i).x < 1 || moves.get(i).x > GameBoard.GRID_DIMENSIONS-2)
 					|| (moves.get(i).y < 0 || moves.get(i).y > GameBoard.GRID_DIMENSIONS-1);
@@ -115,7 +116,7 @@ public class Pawn {
 				}
 			}
 				
-			if(outOfBounds || blankGrid) {
+			if(outOfBounds || blankGrid || invalidFirstMove) {
 				moves.remove(i);
 			}
 		}
