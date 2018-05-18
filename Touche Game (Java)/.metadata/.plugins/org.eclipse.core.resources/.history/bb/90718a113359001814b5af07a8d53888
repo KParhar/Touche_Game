@@ -1,7 +1,0 @@
-package main.game_parts;
-
-public class GameBoard {
-	
-	public final static int WIDTH = 7;
-	
-}

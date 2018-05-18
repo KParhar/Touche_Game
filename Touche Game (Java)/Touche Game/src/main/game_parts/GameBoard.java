@@ -50,6 +50,10 @@ public class GameBoard {
 		}
 	}
 	
+	public void update() {
+		pawns.get(selectedPawn).calculateMoves(this);
+	}
+	
 	public void input(MouseInputDevice[] mouseInputs) {
 		if(mouseInputs[0].getPressed()) {
 			for(int i = 0; i < pawns.size(); i++) {

@@ -19,6 +19,7 @@ public class Pawn {
 	int turnCount;
 	
 	ArrayList<Point> moves;
+	ArrayList<Integer> moveRemove;
 	
 	public Pawn(int x, int y, int gS, boolean r) {
 		gridX = x;
@@ -27,6 +28,8 @@ public class Pawn {
 		gridSize = gS;
 		isRed = !isRound;
 		turnCount = 0;
+		moves = new ArrayList<Point>();
+		moveRemove = new ArrayList<Integer>();
 	}
 	
 	public void render(Graphics g) {
@@ -45,7 +48,46 @@ public class Pawn {
 	}
 	
 	public void calculateMoves(GameBoard b) {
+		moves.clear();
 		
+		//Adding all possible moves
+		if(turnCount != 0) {
+			for(int y = -1; y <= 1; y++) {
+				for(int x = -1; x <= 1; x++) {
+					if(x != 0 || y != 0) {
+						moves.add(new Point(gridX + x, gridY + y));
+					}
+				}
+			}
+		} else {
+			for(int y = -1; y <= 1; y++)
+			{
+				if(isRound) {
+					moves.add(new Point(GameBoard.GRID_DIMENSIONS-2, gridY + y));
+				} else {
+					moves.add(new Point(1, gridY + y));
+				}
+			}
+		}
+		
+		//Removing invalid moves
+		for(int i = moves.size()-1; i >= 0; i--) {
+			boolean outOfBounds = (moves.get(i).x < 0 || moves.get(i).x > GameBoard.GRID_DIMENSIONS-1)
+					|| (moves.get(i).y < 0 || moves.get(i).y > GameBoard.GRID_DIMENSIONS-1);
+			
+			boolean blankGrid = false;
+			for(int y = 0; y < GameBoard.GRID_DIMENSIONS; y += GameBoard.GRID_DIMENSIONS - 1) {
+				for(int x = 1; x < GameBoard.GRID_DIMENSIONS-1; x++) {
+					if(moves.get(i).x == x && moves.get(i).y == y) {
+						blankGrid = true;
+					}
+				}
+			}
+				
+			if(outOfBounds || blankGrid) {
+				moves.remove(i);
+			}
+		}
 	}
 	
 	public void renderMoves(Graphics g) {

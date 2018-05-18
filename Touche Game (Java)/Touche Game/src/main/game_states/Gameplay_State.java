@@ -20,7 +20,7 @@ public class Gameplay_State extends GameState{
 	}
 	
 	public void tick() {
-        
+        gb.update();
 	}
 	
 	public void input(KeyInputDevice[] keys, MouseInputDevice[] mousebuttons){   	
