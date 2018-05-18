@@ -72,7 +72,7 @@ public class Pawn {
 		
 		//Removing invalid moves
 		for(int i = moves.size()-1; i >= 0; i--) {
-			boolean outOfBounds = (moves.get(i).x < 1 || moves.get(i).x > GameBoard.GRID_DIMENSIONS-2)
+			boolean outOfBounds = (moves.get(i).x < 1 || moves.get(i).x > GameBoard.GRID_DIMENSIONS-\
 					|| (moves.get(i).y < 0 || moves.get(i).y > GameBoard.GRID_DIMENSIONS-1);
 			
 			boolean blankGrid = false;
