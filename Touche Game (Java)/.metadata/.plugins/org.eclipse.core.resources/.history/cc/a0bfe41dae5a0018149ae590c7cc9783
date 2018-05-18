@@ -72,15 +72,6 @@ public class Pawn {
 		
 		//Removing invalid moves
 		for(int i = moves.size()-1; i >= 0; i--) {
-			for(int p = 0; p < b.pawns.size(); p++) {
-				if(b.pawns.get(p).getGridX() == moves.get(i).x && b.pawns.get(p).getGridY() == moves.get(i).y) {
-					int deltaX = moves.get(i).x - gridX;
-					int deltaY = moves.get(i).y - gridY;
-					System.out.println(deltaX);
-					moves.get(i).setLocation(gridX + deltaX * 2,  gridY + deltaY * 2);
-				}
-			}
-			
 			boolean outOfBounds = (moves.get(i).x < 1 || moves.get(i).x > GameBoard.GRID_DIMENSIONS-2)
 					|| (moves.get(i).y < 0 || moves.get(i).y > GameBoard.GRID_DIMENSIONS-1);
 			
@@ -92,8 +83,15 @@ public class Pawn {
 					}
 				}
 			}
+			
+			boolean occupied = false;
+			for(int p = 0; p < b.pawns.size(); p++) {
+				if(b.pawns.get(p).getGridX() == moves.get(i).x && b.pawns.get(p).getGridY() == moves.get(i).y) {
+					occupied = true;
+				}
+			}
 				
-			if(outOfBounds || blankGrid) {
+			if(outOfBounds || blankGrid || occupied) {
 				moves.remove(i);
 			}
 		}

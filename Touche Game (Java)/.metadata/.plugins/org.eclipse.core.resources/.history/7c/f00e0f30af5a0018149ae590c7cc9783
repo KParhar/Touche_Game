@@ -77,7 +77,7 @@ public class Pawn {
 					int deltaX = moves.get(i).x - gridX;
 					int deltaY = moves.get(i).y - gridY;
 					System.out.println(deltaX);
-					moves.get(i).setLocation(gridX + deltaX * 2,  gridY + deltaY * 2);
+					moves.get(i).setLocation(deltaX * 2, deltaY * 2);
 				}
 			}
 			
