@@ -44,8 +44,6 @@ public class GameBoard {
 		
 		for(int i = 0; i < pawns.size(); i++) {
 			if(selectedPawn == i) {
-				g.setColor(new Color(0, 128, 128, 100));
-				g.fillRect(pawns.get(i).getGridX() * GRID_SIZE, pawns.get(i).getGridY() * GRID_SIZE, GRID_SIZE, GRID_SIZE);
 				pawns.get(i).renderMoves(g);
 			}
 			pawns.get(i).render(g);
@@ -61,7 +59,16 @@ public class GameBoard {
 			for(int i = 0; i < pawns.size(); i++) {
 				int x = mouseInputs[0].getX() / GRID_SIZE;
 				int y = mouseInputs[0].getY() / GRID_SIZE;
-				pawns.get(selectedPawn).move(x, y);
+				boolean legalMove = true;
+				for(int c = 0; c < pawns.size(); c++) {
+					if(c == selectedPawn) { continue; }
+					if(pawns.get(c).getGridX() == x && pawns.get(c).getGridY() == y) {
+						legalMove = false;
+					}
+				}
+				if(legalMove) {
+					pawns.get(selectedPawn).move(x, y);
+				}
 			}
 		}
 		

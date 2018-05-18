@@ -44,7 +44,7 @@ public class GameBoard {
 		
 		for(int i = 0; i < pawns.size(); i++) {
 			if(selectedPawn == i) {
-				g.setColor(new Color(0, 128, 128, 100));
+				g.setColor(new Color(0, 255, 0, 100));
 				g.fillRect(pawns.get(i).getGridX() * GRID_SIZE, pawns.get(i).getGridY() * GRID_SIZE, GRID_SIZE, GRID_SIZE);
 				pawns.get(i).renderMoves(g);
 			}

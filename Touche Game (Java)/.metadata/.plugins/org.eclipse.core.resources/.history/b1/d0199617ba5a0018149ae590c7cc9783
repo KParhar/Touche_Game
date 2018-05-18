@@ -86,8 +86,7 @@ public class Pawn {
 					}
 					
 					if(Math.abs(deltaX) > 0 && Math.abs(deltaY) > 0) {
-						moves.add(new Point(gridX + deltaX * 2,  gridY + deltaY * 2 - (1*deltaY)));
-						moves.add(new Point(gridX + deltaX * 2 - (1*deltaX),  gridY + deltaY * 2));
+						
 					}
 					
 					if(Math.abs(deltaX) == 0 && Math.abs(deltaY) > 0) {
